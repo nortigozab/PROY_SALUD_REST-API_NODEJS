@@ -55,7 +55,7 @@ export const findOne = (doctorId: number, callback: Function) => {
 };
 export const findAll = (callback: Function) => {
   const queryString = `
-  SELECT D.IdDoctor,D.Nombre,D.Apellido,E.IdEspecialidad,E.NombreEspecialidad,C.IdConsultorio, C.Piso, C.NumeroConsultorio,D.CorreoContacto
+  SELECT D.IdDoctor,D.Nombre,D.Apellido,E.IdEspecialidad,E.NombreEspecialidad,C.IdConsultorio, C.Piso, C.NumeroConsultorio,C.Disponibilidad,D.CorreoContacto
   FROM Doctores D JOIN Consultorios C ON D.Consultorio = C.IdConsultorio 
   JOIN Especialidades E ON D.Especialidad = E.IdEspecialidad`;
 
@@ -80,6 +80,7 @@ export const findAll = (callback: Function) => {
           consultorioId: row.IdConsultorio,
           divisionPiso: row.Piso,
           numeroConsultorio: row.NumeroConsultorio,
+          disponibilidad: row.Disponibilidad,
         },
         correoContacto: row.CorreoContacto,
       };
