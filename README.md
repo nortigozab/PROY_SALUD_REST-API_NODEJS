@@ -1,5 +1,4 @@
 # PROY_SALUD_REST-API
-# PROY_SALUD_REST-API
 ## Descripción
 El proyecto consiste en un aplicativo web (REST API) para la gestión de pacientes, doctores y citas médicas. Permite capturar información a través de formularios, almacenarla en una base de datos (MySQL) y mostrarla en páginas web utilizando DOM.
 
@@ -59,6 +58,3 @@ DB_NAME=NAMEDATABASE
 |:------------|---------: |
 | Se hace una primera prueba, con una extensio de vscode llamada thunder Client que hace una ejecucion tipo postman            | ![Soporte 1](./img/1.gif?raw=true "import")       |
 
-
-## Screenshots  
-![App Screenshot](https://lanecdr.org/wp-content/uploads/2019/08/placeholder.png)  
