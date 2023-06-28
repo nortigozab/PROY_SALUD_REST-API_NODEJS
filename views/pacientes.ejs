@@ -1,0 +1,53 @@
+<%- include("template/cabecera", {tituloWeb: 'Doctores' }) %> <br /><br />
+<div class="container">
+  <div class="row g-0 text-center">
+    <div class="col-sm-4 col-md-4"></div>
+    <div class="col-4 col-md-4">
+      <div class="d-grid gap-2">
+        <a class="btn btn-outline-success" href="#">
+          <img src="/img/paciente.png" alt="" width="32" height="32" />Nuevo
+          Paciente</a
+        >
+      </div>
+    </div>
+    <br /><br /><br />
+    <hr />
+    <br />
+    <table class="table-primary">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Edad</th>
+          <th scope="col">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (pacientes.length> 0) { %> <% pacientes.forEach(paciente=> { %>
+        <tr>
+          <th scope="row"><%= paciente.doctorId %></th>
+          <td><%= paciente.nombre %></td>
+          <td><%= paciente.apellido %></td>
+          <td>
+            <%= paciente.edad.anios %> años, <%= paciente.edad.meses %> meses,
+            <%= paciente.edad.dias %> días
+          </td>
+          <td>
+            <a
+              class="btn btn-warning btn-sm"
+              href="doctores/<%= paciente.pacienteId %>"
+            >
+              Ver
+            </a>
+          </td>
+        </tr>
+
+        <% }) %> <% } %>
+      </tbody>
+    </table>
+    <div class="col-4 col-md-4"></div>
+  </div>
+  <hr />
+</div>
+<%- include("template/footer") %>

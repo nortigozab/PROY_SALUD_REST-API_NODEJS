@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import * as pacienteModel from "../models/paciente";
 import { BasicPaciente, Paciente } from "../types/paciente";
+import moment from "moment";
 const pacienteRouter = express.Router();
 
 pacienteRouter.get("/", async (req: Request, res: Response) => {
@@ -8,7 +9,23 @@ pacienteRouter.get("/", async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).json({ errorMessage: err.message });
     }
-    res.status(200).json({ data: pacientes });
+    const pacientesConEdad = pacientes.map((paciente) => {
+      const fechaNacimiento = moment(paciente.fechaNacimiento);
+      const fechaActual = moment();
+
+      const duracion = moment.duration(fechaActual.diff(fechaNacimiento));
+
+      const edadAnios = duracion.years();
+      const edadMeses = duracion.months();
+      const edadDias = duracion.days();
+
+      return {
+        ...paciente,
+        edad: { anios: edadAnios, meses: edadMeses, dias: edadDias },
+      };
+    });
+    res.render("pacientes", { pacientes: pacientesConEdad });
+    //res.status(200).json({ data: pacientes });
   });
 });
 pacienteRouter.post("/", async (req: Request, res: Response) => {
