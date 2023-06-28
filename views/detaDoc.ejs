@@ -248,7 +248,7 @@
     const res = await data.json();
     if (res["Record(s) updated"]["responseJSON"]["estado"]) {
       window.alert(
-        `Elemento ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
+        `Doctor ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
       );
       window.location.href = "/doctores";
     } else {
