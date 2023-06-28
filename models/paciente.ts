@@ -87,7 +87,12 @@ export const update = (paciente: Paciente, callback: Function) => {
       }
 
       const numUpdate = (<OkPacket>result).affectedRows;
-      callback(null, numUpdate);
+      const responseJSON = {
+        estado: true,
+        id: paciente.pacienteId,
+        mensaje: "Operación exitosa",
+      };
+      callback(null, { numUpdate, responseJSON });
     }
   );
 };

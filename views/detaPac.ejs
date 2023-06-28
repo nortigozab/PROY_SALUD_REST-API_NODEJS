@@ -1,0 +1,221 @@
+<%- include("template/cabecera", {tituloWeb: 'Paciente' }) %>
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div>
+      <h1>Detalle Paciente</h1>
+      <% if (error) { %> <%= mensaje %>
+      <a href="/pacientes" class="btn btn-dark btn-block my-2"> Volver </a>
+      <% } %> <% if (!error) { %>
+      <form id="editar" data-id="<%= paciente.pacienteId %>">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Nombre</span
+          >
+          <input
+            type="text"
+            value="<%= paciente.nombre %>"
+            class="form-control my-2 flex-grow-1"
+            name="nombre"
+            id="nombreInput"
+          />
+          <div class="invalid-feedback" id="errorNombre">
+            El nombre es obligatorio
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Apellido</span
+          >
+          <input
+            type="text"
+            value="<%= paciente.apellido %>"
+            class="form-control my-2 flex-grow-1"
+            name="apellido"
+            id="apellidoInput"
+          />
+          <div class="invalid-feedback" id="errorApellido">
+            El apellido es obligatorio
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            ># Cédula</span
+          >
+          <input
+            type="text"
+            value="<%= paciente.numeroCedula %>"
+            class="form-control my-2 flex-grow-1"
+            name="numeroCedula"
+            id="numeroCedulaInput"
+          />
+          <div id="errornumeroCedula" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Fecha de Nacimiento</span
+          >
+          <input
+            type="date"
+            value="<%= fechaNacimientoFormateada %>"
+            class="form-control my-2 flex-grow-1"
+            name="fechaNacimiento"
+            id="fechaNacimientoInput"
+          />
+          <div id="errorfechaNacimiento" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Telefono</span
+          >
+          <input
+            type="text"
+            value="<%= paciente.telefono %>"
+            class="form-control my-2 flex-grow-1"
+            name="telefono"
+            id="telefonoInput"
+          />
+          <div id="errortelefono" class="invalid-feedback"></div>
+        </div>
+        <div class="row g-0 text-center">
+          <div class="col-sm-4 col-md-4"></div>
+          <div class="col-sm-4 col-md-4">
+            <button class="btn btn-warning btn-block" type="submit">
+              Editar
+            </button>
+          </div>
+          <div class="col-sm-4 col-md-4"></div>
+        </div>
+      </form>
+      <hr />
+      <div class="row g-0 text-center">
+        <div class="col-sm-4 col-md-4"></div>
+        <div class="col-sm-4 col-md-4">
+          <button class="btn btn-danger" onclick="cancelar()">Cancelar</button>
+        </div>
+        <div class="col-sm-4 col-md-4"></div>
+      </div>
+
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include("template/footer") %>
+<script>
+  // onclick vs addEventListener
+  // https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick#:~:text=Essentially%20onclick%20is%20a%20HTML,(using%20this%20for%20example).
+  function cancelar() {
+    const confirmacion = confirm("¿Estás seguro de que quieres cancelar?");
+    if (confirmacion) {
+      window.location.href = "/pacientes";
+    } else {
+      // Si el usuario cancela, no se hace nada
+    }
+  }
+
+  const formEditar = document.querySelector("#editar");
+  const numeroCedulaInput = formEditar.elements["numeroCedula"];
+  const errornumeroCedula = document.querySelector("#errornumeroCedula");
+
+  formEditar.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Capturar los valores de los campos del formulario
+    const nombre = formEditar.elements["nombre"].value;
+    const apellido = formEditar.elements["apellido"].value;
+    const fechaNacimiento = formEditar.elements["fechaNacimiento"].value;
+    const telefono = formEditar.elements["telefono"].value;
+    const numeroCedula = numeroCedulaInput.value;
+    const pacienteId = formEditar.dataset.id;
+
+    // Validar el correo electrónico utilizando la expresión regular
+    const telRegex = /^\d{10}$/;
+    const cedRegex = /^\d{1,10}\b$/;
+
+    if (!cedRegex.test(numeroCedula)) {
+      // Mostrar mensaje de error y resaltar el campo de entrada
+      errornumeroCedula.textContent = "Cedula inválida";
+      errornumeroCedula.classList.add("d-block");
+      numeroCedulaInput.classList.add("is-invalid");
+
+      // Evitar la sumisión del formulario
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (!telRegex.test(telefono)) {
+      // Mostrar mensaje de error y resaltar el campo de entrada
+      document.getElementById("errortelefono").textContent =
+        "Telefono inválido";
+      document.getElementById("errortelefono").classList.add("d-block");
+      formEditar.elements["telefono"].classList.add("is-invalid");
+
+      // Evitar la sumisión del formulario
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    // Validar que los campos no estén vacíos
+    // Validar que los campos no estén vacíos
+    if (
+      !nombre ||
+      !apellido ||
+      !fechaNacimiento ||
+      !telefono ||
+      !numeroCedula
+    ) {
+      // Mostrar mensaje de error y resaltar los campos vacíos
+      // Puedes agregar un mensaje específico para cada campo vacío si lo deseas
+      if (!nombre) {
+        document.getElementById("errorNombre").textContent =
+          "El nombre es obligatorio";
+        document.getElementById("errorNombre").classList.add("d-block");
+        nombreInput.classList.add("is-invalid");
+      }
+
+      if (!apellido) {
+        document.getElementById("errorApellido").textContent =
+          "El apellido es obligatorio";
+        document.getElementById("errorApellido").classList.add("d-block");
+        apellidoInput.classList.add("is-invalid");
+      }
+      if (!fechaNacimiento) {
+        document.getElementById("errorfechaNacimiento").textContent =
+          "La Fecha de Nacimiento es obligatoria";
+        document
+          .getElementById("errorfechaNacimiento")
+          .classList.add("d-block");
+        formEditar.elements["fechaNacimiento"].classList.add("is-invalid");
+      }
+      // Evitar la sumisión del formulario
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    const data = await fetch(`/pacientes/${pacienteId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre,
+        apellido,
+        numeroCedula,
+        fechaNacimiento,
+        telefono,
+        pacienteId,
+      }),
+    });
+
+    const res = await data.json();
+    if (res["Record(s) updated"]["responseJSON"]["estado"]) {
+      window.alert(
+        `Paciente ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
+      );
+      window.location.href = "/pacientes";
+    } else {
+      console.log(res["Record(s) updated"]["responseJSON"]);
+    }
+  });
+</script>
