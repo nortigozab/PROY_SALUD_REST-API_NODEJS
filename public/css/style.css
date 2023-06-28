@@ -16,7 +16,7 @@ body {
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .navbar {
-  background: #ada996; /* fallback for old browsers */
+  background: #eaeaea; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
     #eaeaea,
@@ -31,4 +31,31 @@ body {
     #f2f2f2,
     #ada996
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  padding: 10px;
+}
+
+.navbar-brand {
+  color: #333;
+  font-weight: bold;
+}
+
+.nav-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: transparent;
+  color: #333;
+  text-decoration: none;
+  border: none;
+}
+
+.nav-link.active {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #333;
+  border-radius: 3px;
 }
