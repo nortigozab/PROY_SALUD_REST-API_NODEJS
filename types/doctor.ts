@@ -9,7 +9,7 @@ export interface Doctor extends BasicDoctor {
   especialidad: BasicEspecialidad;
   nombre: string;
   apellido: string;
-  consultorio: BasicConsultorio;
+  consultorio?: BasicConsultorio;
   correoContacto: string;
 }
 

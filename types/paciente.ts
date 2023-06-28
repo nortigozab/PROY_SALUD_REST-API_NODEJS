@@ -1,7 +1,7 @@
 // * file types/paciente.ts
 
 export interface BasicPaciente {
-  id: number;
+  pacienteId: number;
 }
 export interface Paciente extends BasicPaciente {
   nombre: string;
