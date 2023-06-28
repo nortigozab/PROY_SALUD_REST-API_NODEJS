@@ -39,6 +39,10 @@ pacienteRouter.get("/", async (req: Request, res: Response) => {
     });
     res.render("pacientes", {
       pacientes: pacientesConEdad,
+      error: {
+        mensaje: "",
+        r: false,
+      },
     });
     //res.status(200).json({ data: pacientes });
   });
@@ -47,7 +51,35 @@ pacienteRouter.post("/", async (req: Request, res: Response) => {
   const newPaciente: Paciente = req.body;
   pacienteModel.create(newPaciente, (errP: Error, pacienteId: number) => {
     if (errP) {
-      return res.status(404).json({ message: errP.message });
+      pacienteModel.findAll((err: Error, pacientes: Paciente[]) => {
+        if (err) {
+          return res.status(500).json({ errorMessage: err.message });
+        }
+        const pacientesConEdad = pacientes.map((paciente) => {
+          const fechaNacimiento = moment(paciente.fechaNacimiento);
+          const fechaActual = moment();
+
+          const duracion = moment.duration(fechaActual.diff(fechaNacimiento));
+
+          const edadAnios = duracion.years();
+          const edadMeses = duracion.months();
+          const edadDias = duracion.days();
+
+          return {
+            ...paciente,
+            edad: { anios: edadAnios, meses: edadMeses, dias: edadDias },
+          };
+        });
+        res.render("pacientes", {
+          pacientes: pacientesConEdad,
+          error: {
+            mensaje: errP.message,
+            r: true,
+          },
+        });
+        //res.status(200).json({ data: pacientes });
+      });
+      //return res.status(404).json({ message: errP.message });
     }
     pacienteModel.findAll((err: Error, pacientes: Paciente[]) => {
       if (err) {
@@ -70,6 +102,10 @@ pacienteRouter.post("/", async (req: Request, res: Response) => {
       });
       res.render("pacientes", {
         pacientes: pacientesConEdad,
+        error: {
+          mensaje: pacienteId + " Creado con exito",
+          r: false,
+        },
       });
       //res.status(200).json({ data: pacientes });
     });
