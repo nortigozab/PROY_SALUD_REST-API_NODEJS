@@ -36,7 +36,13 @@ doctorRouter.get("/", async (req: Request, res: Response) => {
       if (err) {
         return res.status(500).json({ errorMessage: err.message });
       }
-      res.render("doctores", { doctores: doctores });
+      res.render("doctores", {
+        doctores: doctores,
+        error: {
+          mensaje: "",
+          r: false,
+        },
+      });
       //res.status(200).json({ data: doctores });
     });
   } catch (error) {
@@ -58,14 +64,22 @@ doctorRouter.post("/", async (req: Request, res: Response) => {
       correoContacto: req.body.correoContacto,
     };
     const newDoctor: Doctor = data;
-    // Aquí deberías tener la lógica para crear un nuevo doctor en tu base de datos
-    // Utiliza el modelo o la función correspondiente para crear el nuevo doctor
-
-    // Ejemplo utilizando doctorModel.create
-    doctorModel.create(newDoctor, (err: Error, doctorId: number) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Error al crear el doctor" });
+    doctorModel.create(newDoctor, (errP: Error, doctorId: number) => {
+      if (errP) {
+        doctorModel.findAll((err: Error, doctores: Doctor[]) => {
+          if (err) {
+            return res.status(500).json({ errorMessage: err.message });
+          }
+          res.render("doctores", {
+            doctores: doctores,
+            error: {
+              mensaje: errP.message,
+              r: true,
+            },
+          });
+          //res.status(200).json({ data: doctores });
+        });
+        //return res.status(500).json({ message: "Error al crear el doctor" });
       }
       consultorioModel.findOne(
         data.consultorio.consultorioId,
@@ -84,7 +98,13 @@ doctorRouter.post("/", async (req: Request, res: Response) => {
                 if (err) {
                   return res.status(500).json({ errorMessage: err.message });
                 }
-                res.render("doctores", { doctores: doctores });
+                res.render("doctores", {
+                  doctores: doctores,
+                  error: {
+                    mensaje: doctorId + " Creado con exito",
+                    r: false,
+                  },
+                });
                 //res.status(200).json({ data: doctores });
               });
             }

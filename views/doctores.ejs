@@ -9,6 +9,13 @@
           Doctor</a
         >
       </div>
+      <% if (error && error.r) { %>
+      <br />
+      <div class="alert alert-danger" role="alert"><%= error.mensaje %></div>
+      <% } %> <% if (error && !error.r && error.mensaje) { %>
+      <br />
+      <div class="alert alert-success" role="alert"><%= error.mensaje %></div>
+      <% } %>
     </div>
     <br /><br /><br />
     <hr />
