@@ -57,7 +57,7 @@ export const findAll = (callback: Function) => {
   const queryString = `
   SELECT D.IdDoctor,D.Nombre,D.Apellido,E.IdEspecialidad,E.NombreEspecialidad,C.IdConsultorio, C.Piso, C.NumeroConsultorio,C.Disponibilidad,D.CorreoContacto
   FROM Doctores D JOIN Consultorios C ON D.Consultorio = C.IdConsultorio 
-  JOIN Especialidades E ON D.Especialidad = E.IdEspecialidad`;
+  JOIN Especialidades E ON D.Especialidad = E.IdEspecialidad ORDER BY D.IdDoctor ASC`;
 
   db.query(queryString, (err, result) => {
     if (err) {
