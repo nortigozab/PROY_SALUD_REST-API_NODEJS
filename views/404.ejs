@@ -1,0 +1,58 @@
+<%- include("template/cabecera", { tituloWeb: '404' }) %>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  .error-container {
+    text-align: center;
+  }
+
+  .error-image {
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+
+  .error-title {
+    font-size: 36px;
+    color: #3362cc;
+    margin-bottom: 10px;
+  }
+
+  .error-description {
+    font-size: 18px;
+    color: #000000;
+    margin-bottom: 10px;
+  }
+
+  .error-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3362cc;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+</style>
+
+<div class="container">
+  <div class="error-container">
+    <img src="/img/404.svg" alt="Error 404" class="error-image" />
+    <h1 class="error-title">¡Oops!</h1>
+    <p class="error-description">
+      Lo sentimos, la página que estás buscando no se ha encontrado.
+    </p>
+    <p class="error-description">
+      Por favor, verifica la URL ingresada o regresa a la página de inicio.
+    </p>
+    <a class="error-button" href="/">Volver a la página de inicio</a>
+  </div>
+</div>
+
+<%- include("template/footer") %>
