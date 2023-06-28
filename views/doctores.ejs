@@ -1,0 +1,51 @@
+<%- include("template/cabecera", {tituloWeb: 'Doctores' }) %> <br /><br />
+<div class="container">
+  <div class="row g-0 text-center">
+    <div class="col-sm-4 col-md-4"></div>
+    <div class="col-4 col-md-4">
+      <div class="d-grid gap-2">
+        <a class="btn btn-outline-success" href="#">
+          <img src="/img/doctor.png" alt="" width="32" height="32" />Nuevo
+          Doctor</a
+        >
+      </div>
+    </div>
+    <br /><br /><br />
+    <hr />
+    <br />
+    <table class="table-primary">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Especialidad</th>
+          <th scope="col">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (doctores.length> 0) { %> <% doctores.forEach(doctor=> { %>
+
+        <tr>
+          <th scope="row"><%= doctor.doctorId %></th>
+          <td><%= doctor.nombre %></td>
+          <td><%= doctor.apellido %></td>
+          <td><%= doctor.especialidad.nombreEspecialidad %></td>
+          <td>
+            <a
+              class="btn btn-warning btn-sm"
+              href="doctores/<%= doctor.doctorId %>"
+            >
+              Ver
+            </a>
+          </td>
+        </tr>
+
+        <% }) %> <% } %>
+      </tbody>
+    </table>
+    <div class="col-4 col-md-4"></div>
+  </div>
+  <hr />
+</div>
+<%- include("template/footer") %>
