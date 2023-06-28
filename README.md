@@ -50,6 +50,7 @@ DB_NAME=NAMEDATABASE
 - [body-parser](https://www.npmjs.com/package/body-parser)
 - [Dotenv](https://www.npmjs.com/package/dotenv)
 - [MySQL2](https://www.npmjs.com/package/mysql2)
+- [EJS](https://www.npmjs.com/package/ejs)
 
 **Sigue los pasos de la presentación de pasos en el repositorio -**
 
