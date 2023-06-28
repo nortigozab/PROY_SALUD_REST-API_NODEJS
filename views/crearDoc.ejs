@@ -1,0 +1,184 @@
+<%- include("template/cabecera", {tituloWeb: 'Crear Doctor' }) %>
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center">
+      <h1><img src="/img/doctor.png" alt="" width="64" height="64" />Crear Doctor</h1>
+      <form action="/doctores" id="formCrearDoctor" method="post">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Nombre</span
+          >
+          <input
+            type="text"
+            placeholder="Ingrese Nombre"
+            class="form-control my-2 flex-grow-1"
+            name="nombre"
+            id="nombreInput"
+          />
+          <div class="invalid-feedback" id="errorNombre">
+            El nombre es obligatorio
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Apellido</span
+          >
+          <input
+            type="text"
+            placeholder="Ingrese Apellido"
+            class="form-control my-2 flex-grow-1"
+            name="apellido"
+            id="apellidoInput"
+          />
+          <div class="invalid-feedback" id="errorApellido">
+            El apellido es obligatorio
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Correo</span
+          >
+          <input
+            type="email"
+            placeholder="Ingrese Correo"
+            class="form-control my-2 flex-grow-1"
+            name="correoContacto"
+            id="correoContactoInput"
+          />
+          <div id="errorCorreo" class="invalid-feedback"></div>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Especialidad</span
+          >
+          <select name="especialidadId" id="especialidadSelect">
+            <option value="">.............</option> <!-- Opción por defecto -->
+            <% especialidades.forEach(especialidad => { %>
+              <option value="<%= especialidad.especialidadId %>"><%= especialidad.nombreEspecialidad %></option>
+            <% }) %>
+          </select>
+          <div id="errorEspecialidad" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default"
+              >Consultorio</span
+            >
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Piso</th>
+                  <th scope="col">Consultorio</th>
+                  <th scope="col">Disponibilidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      value="<%= consultorio.divisionPiso %>"
+                      class="form-control my-2 flex-grow-1"
+                      name="divisionPiso"
+                      id="divisionPisoInput"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value="<%= consultorio.numeroConsultorio %>"
+                      class="form-control my-2 flex-grow-1"
+                      name="numeroConsultorio"
+                      id="numeroConsultorioInput"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="button"
+                      value="<%= consultorio.disponibilidad %>"
+                      class="form-control my-2 flex-grow-1 <%= consultorio.disponibilidad ? 'btn btn-success' : 'btn btn-danger' %>"
+                      name="numeroConsultorio"
+                      id="numeroConsultorioInput"
+                      disabled
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <input
+              type="hidden"
+              value="<%= consultorio.consultorioId %>"
+              name="consultorioId"
+            />
+          </div>
+          <div class="input-group mb-3">
+            <button type="submit" class="btn btn-outline-success">Crear</button>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    const formCrearDoctor = document.getElementById('formCrearDoctor');
+    const nombreInput = document.getElementById('nombreInput');
+    const apellidoInput = document.getElementById('apellidoInput');
+    const correoContactoInput = document.getElementById('correoContactoInput');
+    const especialidadSelect = document.getElementById('especialidadSelect');
+    const errorNombre = document.getElementById('errorNombre');
+    const errorApellido = document.getElementById('errorApellido');
+    const errorCorreo = document.getElementById('errorCorreo');
+    const errorEspecialidad = document.getElementById('errorEspecialidad');
+    
+    const emailRegex = /^[\w.-]+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/;
+    
+    formCrearDoctor.addEventListener('submit', function(event) {
+      // Obtener los valores de los campos del formulario
+      const nombre = nombreInput.value;
+      const apellido = apellidoInput.value;
+      const correoContacto = correoContactoInput.value;
+      const especialidadId = especialidadSelect.value;
+    console.log(especialidadId);
+      // Validar nombre
+      if (nombre.trim() === '') {
+        errorNombre.textContent = 'El nombre es obligatorio';
+        errorNombre.classList.add('d-block');
+        nombreInput.classList.add('is-invalid');
+        event.preventDefault();
+        return;
+      }
+    
+      // Validar apellido
+      if (apellido.trim() === '') {
+        errorApellido.textContent = 'El apellido es obligatorio';
+        errorApellido.classList.add('d-block');
+        apellidoInput.classList.add('is-invalid');
+        event.preventDefault();
+        return;
+      }
+    
+      // Validar correo electrónico
+      if (!emailRegex.test(correoContacto)) {
+        errorCorreo.textContent = 'Correo electrónico inválido';
+        errorCorreo.classList.add('d-block');
+        correoContactoInput.classList.add('is-invalid');
+        event.preventDefault();
+        return;
+      }
+    
+      // Validar especialidad
+      if (especialidadId === '') {
+        errorEspecialidad.textContent = 'Seleccione una especialidad.';
+        errorEspecialidad.classList.add('d-block');
+        especialidadSelect.classList.add('is-invalid');
+        event.preventDefault();
+        return;
+      }
+    });
+    
+    </script>
+<%- include("template/footer") %>

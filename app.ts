@@ -8,7 +8,7 @@ import { db } from "./db";
 
 const app = express();
 dotenv.config();
-
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // motor de plantillas

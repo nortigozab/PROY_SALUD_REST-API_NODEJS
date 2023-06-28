@@ -1,17 +1,42 @@
 import express, { Request, Response } from "express";
 import * as doctorModel from "../models/doctor";
 import * as consultorioModel from "../models/consultorio";
+import * as especialidadModel from "../models/especialidad";
 import { BasicConsultorio, Consultorio } from "../types/consultorio";
+import { BasicEspecialidad, Especialidad } from "../types/especialidad";
 import { BasicDoctor, Doctor, DoctorWithDetails } from "../types/doctor";
+
 const doctorRouter = express.Router();
 
+doctorRouter.get("/crear", async (req: Request, res: Response) => {
+  try {
+    especialidadModel.findAll((err: Error, especialidades: Especialidad[]) => {
+      if (err) {
+        return res.status(500).json({ errorMessage: err.message });
+      }
+      consultorioModel.findOneTrue((err: Error, consultorio: Consultorio[]) => {
+        if (err) {
+          return res.status(500).json({ errorMessage: err.message });
+        }
+        res.render("crearDoc", {
+          especialidades: especialidades,
+          consultorio: consultorio,
+        });
+        //res.status(200).json({ data: doctores });
+      });
+      //res.status(200).json({ data: doctores });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 doctorRouter.get("/", async (req: Request, res: Response) => {
   try {
     doctorModel.findAll((err: Error, doctores: Doctor[]) => {
       if (err) {
         return res.status(500).json({ errorMessage: err.message });
       }
-      res.render("doctores", { doctores: doctores, error: false, doctor: [] });
+      res.render("doctores", { doctores: doctores });
       //res.status(200).json({ data: doctores });
     });
   } catch (error) {
@@ -20,15 +45,57 @@ doctorRouter.get("/", async (req: Request, res: Response) => {
 });
 doctorRouter.post("/", async (req: Request, res: Response) => {
   try {
-    const newDoctor: Doctor = req.body;
+    const data = {
+      doctorId: 0,
+      nombre: req.body.nombre,
+      apellido: req.body.apellido,
+      especialidad: {
+        especialidadId: req.body.especialidadId,
+      },
+      consultorio: {
+        consultorioId: req.body.consultorioId,
+      },
+      correoContacto: req.body.correoContacto,
+    };
+    const newDoctor: Doctor = data;
+    // Aquí deberías tener la lógica para crear un nuevo doctor en tu base de datos
+    // Utiliza el modelo o la función correspondiente para crear el nuevo doctor
+
+    // Ejemplo utilizando doctorModel.create
     doctorModel.create(newDoctor, (err: Error, doctorId: number) => {
       if (err) {
-        return res.status(500).json({ message: err.message });
+        console.error(err);
+        return res.status(500).json({ message: "Error al crear el doctor" });
       }
-
-      res.status(200).json({ orderId: doctorId });
+      consultorioModel.findOne(
+        data.consultorio.consultorioId,
+        (err: Error, consultorio: Consultorio) => {
+          if (err) {
+            return res.status(500).json({ message: err.message });
+          }
+          consultorio.disponibilidad = false;
+          consultorioModel.update(
+            consultorio,
+            (err: Error, numUpdate: number) => {
+              if (err) {
+                return res.status(500).json({ message: err.message });
+              }
+              doctorModel.findAll((err: Error, doctores: Doctor[]) => {
+                if (err) {
+                  return res.status(500).json({ errorMessage: err.message });
+                }
+                res.render("doctores", { doctores: doctores });
+                //res.status(200).json({ data: doctores });
+              });
+            }
+          );
+        }
+      );
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
 });
 doctorRouter.get("/:id", async (req: Request, res: Response) => {
   try {
@@ -65,4 +132,5 @@ doctorRouter.put("/:id", async (req: Request, res: Response) => {
     console.log(error);
   }
 });
+
 export { doctorRouter };
