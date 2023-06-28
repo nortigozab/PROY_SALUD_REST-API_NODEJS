@@ -11,7 +11,7 @@ export const create = (doctor: Doctor, callback: Function) => {
       doctor.nombre,
       doctor.apellido,
       doctor.especialidad.especialidadId,
-      doctor.consultorio.consultorioId,
+      doctor.consultorio?.consultorioId,
       doctor.correoContacto,
     ],
     (err, result) => {
@@ -99,17 +99,26 @@ export const update = (doctor: Doctor, callback: Function) => {
       doctor.nombre,
       doctor.apellido,
       doctor.especialidad.especialidadId,
-      doctor.consultorio.consultorioId,
+      doctor.consultorio?.consultorioId,
       doctor.correoContacto,
       doctor.doctorId,
     ],
     (err, result) => {
       if (err) {
-        callback(err);
+        const responseJSON = {
+          estado: false,
+          id: doctor.doctorId,
+          mensaje: "Operación sin Exitosa",
+        };
+        callback(err, responseJSON);
       }
-
       const numUpdate = (<OkPacket>result).affectedRows;
-      callback(null, numUpdate);
+      const responseJSON = {
+        estado: true,
+        id: doctor.doctorId,
+        mensaje: "Operación exitosa",
+      };
+      callback(null, { numUpdate, responseJSON });
     }
   );
 };
