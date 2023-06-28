@@ -43,7 +43,7 @@ export const findOne = (pacienteId: number, callback: Function) => {
   });
 };
 export const findAll = (callback: Function) => {
-  const queryString = "SELECT * FROM Pacientes";
+  const queryString = "SELECT * FROM Pacientes ORDER BY IdPaciente ASC";
 
   db.query(queryString, (err, result) => {
     if (err) {

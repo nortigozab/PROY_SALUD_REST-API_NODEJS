@@ -4,7 +4,7 @@
     <div class="col-sm-4 col-md-4"></div>
     <div class="col-4 col-md-4">
       <div class="d-grid gap-2">
-        <a class="btn btn-outline-success" href="#">
+        <a class="btn btn-outline-success" href="/pacientes/crear">
           <img src="/img/paciente.png" alt="" width="32" height="32" />Nuevo
           Paciente</a
         >
@@ -26,7 +26,7 @@
       <tbody>
         <% if (pacientes.length> 0) { %> <% pacientes.forEach(paciente=> { %>
         <tr>
-          <th scope="row"><%= paciente.doctorId %></th>
+          <th scope="row"><%= paciente.pacienteId %></th>
           <td><%= paciente.nombre %></td>
           <td><%= paciente.apellido %></td>
           <td>
@@ -51,3 +51,4 @@
   <hr />
 </div>
 <%- include("template/footer") %>
+<script></script>

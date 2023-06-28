@@ -1,0 +1,159 @@
+<%- include("template/cabecera", {tituloWeb: 'Crear Paciente' }) %>
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center">
+      <h1><img src="/img/paciente.png" alt="" width="64" height="64" />Crear Paciente</h1>
+      <form action="/pacientes" id="formCrearPaciete" method="post">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Nombre</span
+          >
+          <input
+            type="text"
+            placeholder="Ingrese Nombre"
+            class="form-control my-2 flex-grow-1"
+            name="nombre"
+            id="nombreInput"
+          />
+          <div class="invalid-feedback" id="errorNombre">
+            El nombre es obligatorio
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Apellido</span
+          >
+          <input
+            type="text"
+            placeholder="Ingrese Apellido"
+            class="form-control my-2 flex-grow-1"
+            name="apellido"
+            id="apellidoInput"
+          />
+          <div class="invalid-feedback" id="errorApellido">
+            El apellido es obligatorio
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            ># Cédula</span
+          >
+          <input
+            type="text"
+            placeholder="Ingrese Cedula"
+            class="form-control my-2 flex-grow-1"
+            name="numeroCedula"
+            id="numeroCedulaInput"
+          />
+          <div id="errornumeroCedula" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Fecha de Nacimiento</span
+          >
+          <input
+            type="date"
+            placeholder="Ingrese Fecha"
+            class="form-control my-2 flex-grow-1"
+            name="fechaNacimiento"
+            id="fechaNacimientoInput"
+          />
+          <div id="errorfechaNacimiento" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Telefono</span
+          >
+          <input
+            type="text"
+            placeholder="Ingrese Telefono"
+            class="form-control my-2 flex-grow-1"
+            name="telefono"
+            id="telefonoInput"
+          />
+          <div id="errortelefono" class="invalid-feedback"></div>
+        </div>
+        <div class="row g-0 text-center">
+          <div class="col-sm-4 col-md-4"></div>
+          <div class="col-sm-4 col-md-4">
+            <button class="btn btn-success btn-block" type="submit">
+              Enviar
+            </button>
+          </div>
+          <div class="col-sm-4 col-md-4"></div>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  
+  const telRegex = /^(\d{10})+$/;
+const cedRegex = /^\d{1,10}\b$/;
+
+const formCrearPaciente = document.querySelector('#formCrearPaciete');
+
+formCrearPaciente.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const nombreInput = document.getElementById('nombreInput');
+  const apellidoInput = document.getElementById('apellidoInput');
+  const numeroCedulaInput = document.getElementById('numeroCedulaInput');
+  const fechaNacimientoInput = document.getElementById('fechaNacimientoInput');
+  const telefonoInput = document.getElementById('telefonoInput');
+
+  if (!cedRegex.test(numeroCedulaInput.value)) {
+    // Mostrar mensaje de error
+    document.querySelector("#errornumeroCedula").textContent =
+          "Numero de Cedula no valido";
+          document.querySelector("#errornumeroCedula").classList.add("d-block");
+        formCrearPaciente.element["numeroCedula"].value.classList.add("is-invalid");
+    return;
+  }
+
+  // Validar número de teléfono
+  if (!telRegex.test(telefonoInput.value)) {
+    document.querySelector("#errortelefono").textContent =
+    "Numero de telefono no valido";
+    document.querySelector("#errortelefono").classList.add("d-block");
+  formCrearPaciente.element["telefono"].value.classList.add("is-invalid");
+    return;
+  }
+  // Validar campos vacíos
+  if (
+    nombreInput.value.trim() === '' ||
+    apellidoInput.value.trim() === '' ||
+    fechaNacimientoInput.value.trim() === ''
+  ) {
+    // Mostrar mensaje de error
+   if (nombreInput.value.trim() === ''){
+    document.querySelector("#errorNombre").textContent =
+    "nombre obligatorio";
+    document.querySelector("#errorNombre").classList.add("d-block");
+  formCrearPaciente.element["nombre"].value.classList.add("is-invalid");
+  return;
+   }
+   if (apellidoInput.value.trim() === ''){
+    document.querySelector("#errorApellido").textContent =
+    "Apellido obligatorio";
+    document.querySelector("#errorApellido").classList.add("d-block");
+  formCrearPaciente.element["apellido"].value.classList.add("is-invalid");
+  return;
+   }
+   if (fechaNacimientoInput.value.trim() === ''){
+    document.querySelector("#errorfechaNacimiento").textContent =
+    "fecha de Nacmiento obligatorio";
+    document.querySelector("#errorfechaNacimiento").classList.add("d-block");
+  formCrearPaciente.element["fechaNacimiento"].value.classList.add("is-invalid");
+  return;
+   }
+  }
+  // Si todos los campos son válidos, enviar el formulario
+  formCrearPaciente.submit();
+});
+
+</script>
+<%- include("template/footer") %>

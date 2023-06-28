@@ -4,6 +4,19 @@ import { BasicPaciente, Paciente } from "../types/paciente";
 import moment from "moment";
 const pacienteRouter = express.Router();
 
+pacienteRouter.get("/crear", async (req: Request, res: Response) => {
+  try {
+    pacienteModel.findAll((err: Error, paciente: Paciente[]) => {
+      if (err) {
+        return res.status(500).json({ errorMessage: err.message });
+      }
+      res.render("crearPac", {});
+      //res.status(200).json({ data: doctores });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 pacienteRouter.get("/", async (req: Request, res: Response) => {
   pacienteModel.findAll((err: Error, pacientes: Paciente[]) => {
     if (err) {
@@ -24,18 +37,42 @@ pacienteRouter.get("/", async (req: Request, res: Response) => {
         edad: { anios: edadAnios, meses: edadMeses, dias: edadDias },
       };
     });
-    res.render("pacientes", { pacientes: pacientesConEdad });
+    res.render("pacientes", {
+      pacientes: pacientesConEdad,
+    });
     //res.status(200).json({ data: pacientes });
   });
 });
 pacienteRouter.post("/", async (req: Request, res: Response) => {
   const newPaciente: Paciente = req.body;
-  pacienteModel.create(newPaciente, (err: Error, pacienteId: number) => {
-    if (err) {
-      return res.status(500).json({ message: err.message });
+  pacienteModel.create(newPaciente, (errP: Error, pacienteId: number) => {
+    if (errP) {
+      return res.status(404).json({ message: errP.message });
     }
+    pacienteModel.findAll((err: Error, pacientes: Paciente[]) => {
+      if (err) {
+        return res.status(500).json({ errorMessage: err.message });
+      }
+      const pacientesConEdad = pacientes.map((paciente) => {
+        const fechaNacimiento = moment(paciente.fechaNacimiento);
+        const fechaActual = moment();
 
-    res.status(200).json({ orderId: pacienteId });
+        const duracion = moment.duration(fechaActual.diff(fechaNacimiento));
+
+        const edadAnios = duracion.years();
+        const edadMeses = duracion.months();
+        const edadDias = duracion.days();
+
+        return {
+          ...paciente,
+          edad: { anios: edadAnios, meses: edadMeses, dias: edadDias },
+        };
+      });
+      res.render("pacientes", {
+        pacientes: pacientesConEdad,
+      });
+      //res.status(200).json({ data: pacientes });
+    });
   });
 });
 pacienteRouter.get("/:id", async (req: Request, res: Response) => {
