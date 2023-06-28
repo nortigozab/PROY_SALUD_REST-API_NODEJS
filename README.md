@@ -56,15 +56,12 @@ DB_NAME=NAMEDATABASE
 
 ## Linea de Tiempo
 
-| Descripcion | Soporte   |
-|:------------|---------: |
-| Se hace una primera prueba, con una extensión de vscode llamada thunder Client que hace una ejecucion tipo postman            | ![Soporte 1](./img/1.gif?raw=true "import")       |
-
 En esta versión se hace la prueba para doctores con un cliente local, con la extensión thunder Client, donde estas peticiones son muy basicas
 
 | Descripcion | Soporte   |
 |:------------|---------: |
-| Se hace una segunda prueba, ya de forma grafica       | ![Soporte 1](./img/2.gif?raw=true "import")       |
+| Se hace una primera prueba, con una extensión de vscode llamada thunder Client que hace una ejecucion tipo postman            | ![Soporte 1](./img/1.gif?raw=true "import")       |
+
 
 En esta version se hace una prueba para doctores ya de forma grafica, donde se puede observer:
 - Todos los doctores creados con una información relevante.
@@ -73,3 +70,16 @@ En esta version se hace una prueba para doctores ya de forma grafica, donde se p
   - En esta creación se hacen dos consultas
     - Especialidad: Donde se enlista todas las Especialidades que hay en la Base de datos
     - Consultorio: Donde se asigna un consultorio si esta disponible
+
+| Descripcion | Soporte   |
+|:------------|---------: |
+| Se hace una segunda prueba, ya de forma grafica       | ![Soporte 2](./img/2.gif?raw=true "import")       |
+
+En esta version se hace una prueba para pacientes ya de forma grafica, donde se puede observer:
+- Todos los pacientes creados con una información relevante, nombre, apellido y edad, calculada con fecha de nacimento  fecha actual.
+- Edición de un paciente, donde se puede cambiar el nombre, apellido, cedula, fecha de naciemto y telefono
+- Creacion de Nuevo paciente
+
+| Descripcion | Soporte   |
+|:------------|---------: |
+| Se hace una tercera prueba, ya de forma grafica       | ![Soporte 3](./img/3.gif?raw=true "import")       |
