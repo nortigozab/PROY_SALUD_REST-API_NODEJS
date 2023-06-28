@@ -22,7 +22,6 @@ app.use("/pacientes", pacienteRouter);
 app.use((req, res, next) => {
   res.status(404).render("404", {
     titulo: "404",
-    descripcion: "Page Not Found...",
   });
 });
 db.connect((err) => {
