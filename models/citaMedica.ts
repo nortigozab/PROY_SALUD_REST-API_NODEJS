@@ -28,54 +28,66 @@ export const create = (cita: CitaMedica, callback: Function) => {
   );
 };
 export const findOne = (citaId: number, callback: Function) => {
-  const queryString = `
-  SELECT cm.IdCita, d.IdDoctor, d.Nombre as NombreDoc, d.Apellido as ApellidoDoc, e.IdEspecialidad, e.NombreEspecialidad, c.IdConsultorio, c.Piso, c.NumeroConsultorio, c.Disponibilidad, d.CorreoContacto, p.IdPaciente, p.Nombre as NombrePac, p.Apellido as ApellidoPac, p.NumeroCedula, p.FechaNacimiento, p.Telefono, e.IdEspecialidad, e.NombreEspecialidad, cm.Fecha, cm.Disponibilidad
-FROM CitasMedicas cm
-JOIN Doctores d ON cm.IdDoctor = d.IdDoctor
-JOIN Especialidades e ON e.IdEspecialidad = cm.Especialidad AND e.IdEspecialidad = d.Especialidad
-JOIN Consultorios c ON c.IdConsultorio = d.Consultorio
-LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente WHERE cm.IdCita=?`;
+  try {
+    const queryString = `
+      SELECT cm.IdCita, d.IdDoctor, d.Nombre as NombreDoc, d.Apellido as ApellidoDoc, e.IdEspecialidad, e.NombreEspecialidad, c.IdConsultorio, c.Piso, c.NumeroConsultorio, c.Disponibilidad, d.CorreoContacto, p.IdPaciente, p.Nombre as NombrePac, p.Apellido as ApellidoPac, p.NumeroCedula, p.FechaNacimiento, p.Telefono, e.IdEspecialidad, e.NombreEspecialidad, cm.Fecha, cm.Disponibilidad
+      FROM CitasMedicas cm
+      JOIN Doctores d ON cm.IdDoctor = d.IdDoctor
+      JOIN Especialidades e ON e.IdEspecialidad = cm.Especialidad AND e.IdEspecialidad = d.Especialidad
+      JOIN Consultorios c ON c.IdConsultorio = d.Consultorio
+      LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente WHERE cm.IdCita=?
+    `;
 
-  db.query(queryString, citaId, (err, result) => {
-    if (err) {
-      callback(err);
-    }
-    const row = (<RowDataPacket>result)[0];
-    const cita: CitaMedicaWithDetails = {
-      citaId: row.IdCita,
-      especialidad: {
-        especialidadId: row.IdEspecialidad,
-        nombreEspecialidad: row.NombreEspecialidad,
-      },
-      doctor: {
-        doctorId: row.IdDoctor,
-        nombre: row.NombreDoc,
-        apellido: row.ApellidoDoc,
-        especialidad: {
-          especialidadId: row.IdEspecialidad,
-          nombreEspecialidad: row.NombreEspecialidad,
-        },
-        consultorio: {
-          consultorioId: row.IdConsultorio,
-          divisionPiso: row.Piso,
-          numeroConsultorio: row.NumeroConsultorio,
-          disponibilidad: row.Disponibilidad,
-        },
-        correoContacto: row.CorreoContacto,
-      },
-      paciente: {
-        pacienteId: row.IdPaciente,
-        nombre: row.Nombre,
-        apellido: row.Apellido,
-        numeroCedula: row.NumeroCedula,
-        fechaNacimiento: row.FechaNacimiento,
-        telefono: row.Telefono,
-      },
-      fecha: row.Fecha,
-      disponibilidad: row.Disponibilidad,
-    };
-    callback(null, cita);
-  });
+    db.query(queryString, citaId, (err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        const row = (<RowDataPacket[]>result)[0];
+        if (!row) {
+          callback(
+            new Error("No se encontró ninguna cita con el ID proporcionado.")
+          );
+        } else {
+          const cita: CitaMedicaWithDetails = {
+            citaId: row.IdCita,
+            especialidad: {
+              especialidadId: row.IdEspecialidad,
+              nombreEspecialidad: row.NombreEspecialidad,
+            },
+            doctor: {
+              doctorId: row.IdDoctor,
+              nombre: row.NombreDoc,
+              apellido: row.ApellidoDoc,
+              especialidad: {
+                especialidadId: row.IdEspecialidad,
+                nombreEspecialidad: row.NombreEspecialidad,
+              },
+              consultorio: {
+                consultorioId: row.IdConsultorio,
+                divisionPiso: row.Piso,
+                numeroConsultorio: row.NumeroConsultorio,
+                disponibilidad: row.Disponibilidad,
+              },
+              correoContacto: row.CorreoContacto,
+            },
+            paciente: {
+              pacienteId: row.IdPaciente,
+              nombre: row.NombrePac,
+              apellido: row.ApellidoPac,
+              numeroCedula: row.NumeroCedula,
+              fechaNacimiento: row.FechaNacimiento,
+              telefono: row.Telefono,
+            },
+            fecha: row.Fecha,
+            disponibilidad: row.Disponibilidad,
+          };
+          callback(null, cita);
+        }
+      }
+    });
+  } catch (error) {
+    callback(error);
+  }
 };
 
 export const findAllEspe = (especialidadId: number, callback: Function) => {
