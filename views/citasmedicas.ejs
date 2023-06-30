@@ -1,0 +1,70 @@
+<%- include("template/cabecera", {tituloWeb: 'citas' }) %> <br /><br />
+<div class="container">
+  <div class="row g-0 text-center">
+    <div class="col-sm-4 col-md-4"></div>
+    <div class="col-4 col-md-4">
+      <div class="d-grid gap-2">
+        <a class="btn btn-outline-success" href="/doctores/crear">
+          <img src="/img/citas.png" alt="" width="32" height="32" />Asignar Cita
+          Disponibles</a
+        >
+      </div>
+      <% if (error && error.r) { %>
+      <br />
+      <div class="alert alert-danger" role="alert"><%= error.mensaje %></div>
+      <% } %> <% if (error && !error.r && error.mensaje) { %>
+      <br />
+      <div class="alert alert-success" role="alert"><%= error.mensaje %></div>
+      <% } %>
+    </div>
+    <br /><br /><br />
+    <hr />
+    <br />
+    <table class="table">
+      <thead>
+        <tr class="table-active">
+          <th scope="col">#</th>
+          <th scope="col">Especialidad</th>
+          <th scope="col">Doctor</th>
+          <th scope="col">Paciente</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Disponibilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (citas.length > 0) { %> <% citas.forEach((cita, index) => { %>
+        <tr
+          class="<%= cita.disponibilidad ? 'table-success' : 'table-danger' %> table-row-color"
+        >
+          <th scope="row"><%= cita.citaId %></th>
+          <td><%= cita.especialidad.nombreEspecialidad %></td>
+          <td><%= cita.doctor.nombre %> <%= cita.doctor.apellido %></td>
+          <td><%= cita.paciente.nombre %> <%= cita.paciente.apellido %></td>
+          <td><%= cita.fecha %></td>
+          <td>
+            <% if (cita.disponibilidad) { %>
+            <a
+              class="btn btn-success btn-sm"
+              href="citasmedicas/<%= cita.citaId %>"
+            >
+              Editar
+            </a>
+            <% } else { %>
+            <a
+              class="btn btn-danger btn-sm"
+              href="citasmedicas/<%= cita.citaId %>"
+            >
+              Editar
+            </a>
+            <% } %>
+          </td>
+        </tr>
+        <% }) %> <% } %>
+      </tbody>
+    </table>
+
+    <div class="col-4 col-md-4"></div>
+  </div>
+  <hr />
+</div>
+<%- include("template/footer") %>
