@@ -16,20 +16,30 @@ export const create = (especialidad: Especialidad, callback: Function) => {
 };
 export const findOne = (especialidadId: number, callback: Function) => {
   const queryString = `
-  SELECT * FROM Especialidades WHERE IdEspecialidad=?`;
+    SELECT * FROM Especialidades WHERE IdEspecialidad=?`;
 
   db.query(queryString, especialidadId, (err, result) => {
     if (err) {
       callback(err);
+    } else {
+      const row = (<RowDataPacket[]>result)[0];
+      if (!row) {
+        callback(
+          new Error(
+            "No se encontró ninguna especialidad con el ID proporcionado."
+          )
+        );
+      } else {
+        const especialidad: Especialidad = {
+          especialidadId: row.IdEspecialidad,
+          nombreEspecialidad: row.NombreEspecialidad,
+        };
+        callback(null, especialidad);
+      }
     }
-    const row = (<RowDataPacket>result)[0];
-    const especialidad: Especialidad = {
-      especialidadId: row.IdEspecialidad,
-      nombreEspecialidad: row.NombreEspecialidad,
-    };
-    callback(null, especialidad);
   });
 };
+
 export const findAll = (callback: Function) => {
   const queryString = `
   SELECT * FROM Especialidades`;

@@ -24,24 +24,32 @@ export const create = (paciente: Paciente, callback: Function) => {
   );
 };
 export const findOne = (pacienteId: number, callback: Function) => {
-  const queryString = "SELECT * FROM Pacientes where IdPaciente=?";
+  const queryString = "SELECT * FROM Pacientes WHERE IdPaciente=?";
 
   db.query(queryString, pacienteId, (err, result) => {
     if (err) {
       callback(err);
+    } else {
+      const row = (<RowDataPacket[]>result)[0];
+      if (!row) {
+        callback(
+          new Error("No se encontró ningún paciente con el ID proporcionado.")
+        );
+      } else {
+        const paciente: Paciente = {
+          pacienteId: row.IdPaciente,
+          nombre: row.Nombre,
+          apellido: row.Apellido,
+          numeroCedula: row.NumeroCedula,
+          fechaNacimiento: row.FechaNacimiento,
+          telefono: row.Telefono,
+        };
+        callback(null, paciente);
+      }
     }
-    const row = (<RowDataPacket>result)[0];
-    const paciente: Paciente = {
-      pacienteId: row.IdPaciente,
-      nombre: row.Nombre,
-      apellido: row.Apellido,
-      numeroCedula: row.NumeroCedula,
-      fechaNacimiento: row.FechaNacimiento,
-      telefono: row.Telefono,
-    };
-    callback(null, paciente);
   });
 };
+
 export const findAll = (callback: Function) => {
   const queryString = "SELECT * FROM Pacientes ORDER BY IdPaciente ASC";
 

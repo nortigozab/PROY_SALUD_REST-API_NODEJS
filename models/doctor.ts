@@ -23,36 +23,82 @@ export const create = (doctor: Doctor, callback: Function) => {
     }
   );
 };
-export const findOne = (doctorId: number, callback: Function) => {
+export const findAllEspe = (especialidadId: number, callback: Function) => {
   const queryString = `
   SELECT D.IdDoctor,D.Nombre,D.Apellido,E.IdEspecialidad,E.NombreEspecialidad,C.IdConsultorio, C.Piso, C.NumeroConsultorio,C.Disponibilidad,D.CorreoContacto
   FROM Doctores D JOIN Consultorios C ON D.Consultorio = C.IdConsultorio 
-  JOIN Especialidades E ON D.Especialidad = E.IdEspecialidad WHERE D.IdDoctor =?`;
+  JOIN Especialidades E ON D.Especialidad = E.IdEspecialidad WHERE Especialidad=? ORDER BY D.IdDoctor ASC`;
+
+  db.query(queryString, especialidadId, (err, result) => {
+    if (err) {
+      callback(err);
+    }
+
+    const rows = <RowDataPacket[]>result;
+    const doctores: Doctor[] = [];
+
+    rows.forEach((row) => {
+      const doctor: DoctorWithDetails = {
+        doctorId: row.IdDoctor,
+        especialidad: {
+          especialidadId: row.IdEspecialidad,
+          nombreEspecialidad: row.NombreEspecialidad,
+        },
+        nombre: row.Nombre,
+        apellido: row.Apellido,
+        consultorio: {
+          consultorioId: row.IdConsultorio,
+          divisionPiso: row.Piso,
+          numeroConsultorio: row.NumeroConsultorio,
+          disponibilidad: row.Disponibilidad,
+        },
+        correoContacto: row.CorreoContacto,
+      };
+      doctores.push(doctor);
+    });
+    callback(null, doctores);
+  });
+};
+export const findOne = (doctorId: number, callback: Function) => {
+  const queryString = `
+    SELECT D.IdDoctor, D.Nombre, D.Apellido, E.IdEspecialidad, E.NombreEspecialidad, C.IdConsultorio, C.Piso, C.NumeroConsultorio, C.Disponibilidad, D.CorreoContacto
+    FROM Doctores D
+    JOIN Consultorios C ON D.Consultorio = C.IdConsultorio
+    JOIN Especialidades E ON D.Especialidad = E.IdEspecialidad
+    WHERE D.IdDoctor = ?`;
 
   db.query(queryString, doctorId, (err, result) => {
     if (err) {
       callback(err);
+    } else {
+      const row = (<RowDataPacket[]>result)[0];
+      if (!row) {
+        callback(
+          new Error("No se encontró ningún doctor con el ID proporcionado.")
+        );
+      } else {
+        const doctor: DoctorWithDetails = {
+          doctorId: row.IdDoctor,
+          especialidad: {
+            especialidadId: row.IdEspecialidad,
+            nombreEspecialidad: row.NombreEspecialidad,
+          },
+          nombre: row.Nombre,
+          apellido: row.Apellido,
+          consultorio: {
+            consultorioId: row.IdConsultorio,
+            divisionPiso: row.Piso,
+            numeroConsultorio: row.NumeroConsultorio,
+            disponibilidad: row.Disponibilidad,
+          },
+          correoContacto: row.CorreoContacto,
+        };
+        callback(null, doctor);
+      }
     }
-    const row = (<RowDataPacket>result)[0];
-    const doctor: DoctorWithDetails = {
-      doctorId: row.IdDoctor,
-      especialidad: {
-        especialidadId: row.IdEspecialidad,
-        nombreEspecialidad: row.NombreEspecialidad,
-      },
-      nombre: row.Nombre,
-      apellido: row.Apellido,
-      consultorio: {
-        consultorioId: row.IdConsultorio,
-        divisionPiso: row.Piso,
-        numeroConsultorio: row.NumeroConsultorio,
-        disponibilidad: row.Disponibilidad,
-      },
-      correoContacto: row.CorreoContacto,
-    };
-    callback(null, doctor);
   });
 };
+
 export const findAll = (callback: Function) => {
   const queryString = `
   SELECT D.IdDoctor,D.Nombre,D.Apellido,E.IdEspecialidad,E.NombreEspecialidad,C.IdConsultorio, C.Piso, C.NumeroConsultorio,C.Disponibilidad,D.CorreoContacto

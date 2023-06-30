@@ -19,22 +19,28 @@ export const create = (consultorio: Consultorio, callback: Function) => {
   );
 };
 export const findOne = (consultorioId: number, callback: Function) => {
-  const queryString = ` SELECT IdConsultorio, Piso, NumeroConsultorio, Disponibilidad FROM Consultorios WHERE IdConsultorio=?`;
+  const queryString = `SELECT IdConsultorio, Piso, NumeroConsultorio, Disponibilidad FROM Consultorios WHERE IdConsultorio=?`;
 
   db.query(queryString, consultorioId, (err, result) => {
     if (err) {
       callback(err);
+    } else {
+      const row = (<RowDataPacket[]>result)[0];
+      if (!row) {
+        callback(new Error("No se encontró ningún consultorio con el ID proporcionado."));
+      } else {
+        const consultorio: Consultorio = {
+          consultorioId: row.IdConsultorio,
+          divisionPiso: row.Piso,
+          numeroConsultorio: row.NumeroConsultorio,
+          disponibilidad: row.Disponibilidad,
+        };
+        callback(null, consultorio);
+      }
     }
-    const row = (<RowDataPacket>result)[0];
-    const consultorio: Consultorio = {
-      consultorioId: row.IdConsultorio,
-      divisionPiso: row.Piso,
-      numeroConsultorio: row.NumeroConsultorio,
-      disponibilidad: row.Disponibilidad,
-    };
-    callback(null, consultorio);
   });
 };
+
 export const findAll = (callback: Function) => {
   const queryString = ` SELECT IdConsultorio, Piso, NumeroConsultorio, Disponibilidad FROM Consultorios`;
 
