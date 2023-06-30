@@ -3,6 +3,7 @@ import express from "express";
 import * as bodyParser from "body-parser";
 import { doctorRouter } from "./routes/doctorRouter";
 import { pacienteRouter } from "./routes/pacienteRouter";
+import { citaMedicaRouter } from "./routes/CitaMedicaRouter";
 import { index } from "./routes/index";
 import { db } from "./db";
 
@@ -19,6 +20,7 @@ app.use(express.static(__dirname + "/public"));
 app.use("/", index);
 app.use("/doctores", doctorRouter);
 app.use("/pacientes", pacienteRouter);
+app.use("/citasmedicas", citaMedicaRouter);
 app.use((req, res, next) => {
   res.status(404).render("404", {
     titulo: "404",
