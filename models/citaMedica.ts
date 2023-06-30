@@ -85,7 +85,7 @@ FROM CitasMedicas cm
 JOIN Doctores d ON cm.IdDoctor = d.IdDoctor
 JOIN Especialidades e ON e.IdEspecialidad = cm.Especialidad AND e.IdEspecialidad = d.Especialidad
 JOIN Consultorios c ON c.IdConsultorio = d.Consultorio
-LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente WHERE e.IdEspecialidad=?`;
+LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente WHERE e.IdEspecialidad=? and cm.Disponibilidad=true`;
 
   db.query(queryString, especialidadId, (err, result) => {
     if (err) {
