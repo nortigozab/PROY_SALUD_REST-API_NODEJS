@@ -1,0 +1,177 @@
+<%- include("template/cabecera", {tituloWeb: 'Cita Medica' }) %>
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div>
+      <h1>Detalle Cita Medica</h1>
+      <% if (error) { %> <%= mensaje %>
+      <a href="/citasmedicas" class="btn btn-dark btn-block my-2"> Volver </a>
+      <% } %> <% if (!error) { %>
+      <form id="editar" data-id="<%= cita.citaId %>"></form>
+      <hr />
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default"
+          ># Cédula</span
+        >
+        <input
+          type="text"
+          value="<%= cita.paciente.numeroCedula %>"
+          class="form-control my-2 flex-grow-1"
+          name="numeroCedula"
+          id="numeroCedulaInput"
+        />
+        <div id="errornumeroCedula" class="invalid-feedback"></div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default"
+          >Fecha</span
+        >
+        <input
+          type="date"
+          value="<%= fechaFormateada %>"
+          class="form-control my-2 flex-grow-1"
+          name="fecha"
+          id="fechaInput"
+        />
+        <div id="errorfecha" class="invalid-feedback"></div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">Especialidad</span>
+        <select name="especialidadId" id="especialidadSelect">
+          <option value="">.............</option> <!-- Opción por defecto -->
+          <% especialidades.forEach(especialidad => { %>
+            <option value="<%= especialidad.especialidadId %>" <%= especialidad.especialidadId === cita.especialidad.especialidadId ? 'selected' : '' %>>
+              <%= especialidad.nombreEspecialidad %>
+            </option>
+          <% }) %>
+        </select>
+        <div id="errorEspecialidad" class="invalid-feedback"></div>
+      </div>
+      
+      <div class="row g-0 text-center">
+        <div class="col-sm-4 col-md-4"></div>
+        <div class="col-sm-4 col-md-4">
+          <button class="btn btn-danger" onclick="cancelar()">Cancelar</button>
+        </div>
+        <div class="col-sm-4 col-md-4"></div>
+      </div>
+
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include("template/footer") %>
+<script>
+  // onclick vs addEventListener
+  // https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick#:~:text=Essentially%20onclick%20is%20a%20HTML,(using%20this%20for%20example).
+  function cancelar() {
+    const confirmacion = confirm("¿Estás seguro de que quieres cancelar?");
+    if (confirmacion) {
+      window.location.href = "/citasmedicas";
+    }
+  }
+  const formEditar = document.querySelector("#editar");
+  const doctorId = formEditar.dataset.id;
+  const especialidadSelect = document.querySelector("#especialidadSelect");
+  const especialidadId = especialidadSelect.value;
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("Especialidad seleccionada inicialmente:", especialidadId);
+  });
+  // Escuchar el evento de cambio en el select de especialidad
+  especialidadSelect.addEventListener("change", function () {
+    console.log("Especialidad seleccionada:", especialidadId);
+  });
+  
+              
+  /*formEditar.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Capturar los valores de los campos del formulario
+    const nombre = formEditar.elements["nombre"].value;
+    const apellido = formEditar.elements["apellido"].value;
+    const especialidadId = formEditar.elements["especialidadId"].value;
+    const consultorioId = formEditar.elements["consultorioId"].value;
+    const correoContacto = correoContactoInput.value;
+    const doctorId = formEditar.dataset.id;
+
+    // Validar el correo electrónico utilizando la expresión regular
+    const emailRegex = /^[\w.-]+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/;
+    if (!emailRegex.test(correoContacto)) {
+      // Mostrar mensaje de error y resaltar el campo de entrada
+      errorCorreo.textContent = "Correo electrónico inválido";
+      errorCorreo.classList.add("d-block");
+      correoContactoInput.classList.add("is-invalid");
+
+      // Evitar la sumisión del formulario
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    // Validar que los campos no estén vacíos
+    // Validar que los campos no estén vacíos
+    if (
+      !nombre ||
+      !apellido ||
+      !especialidadId ||
+      !consultorioId ||
+      !correoContacto
+    ) {
+      // Mostrar mensaje de error y resaltar los campos vacíos
+      // Puedes agregar un mensaje específico para cada campo vacío si lo deseas
+      if (!nombre) {
+        document.getElementById("errorNombre").textContent =
+          "El nombre es obligatorio";
+        document.getElementById("errorNombre").classList.add("d-block");
+        nombreInput.classList.add("is-invalid");
+      }
+
+      if (!apellido) {
+        document.getElementById("errorApellido").textContent =
+          "El apellido es obligatorio";
+        document.getElementById("errorApellido").classList.add("d-block");
+        apellidoInput.classList.add("is-invalid");
+      }
+
+      // Repite para los demás campos vacíos
+
+      // Evitar la sumisión del formulario
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    // Si la validación es exitosa, limpiar el mensaje de error y la clase de error
+    errorCorreo.textContent = "";
+    errorCorreo.classList.remove("d-block");
+    correoContactoInput.classList.remove("is-invalid");
+    const data = await fetch(`/doctores/${doctorId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre,
+        apellido,
+        especialidad: {
+          especialidadId,
+        },
+        consultorio: {
+          consultorioId,
+        },
+        correoContacto,
+        doctorId,
+      }),
+    });
+
+    const res = await data.json();
+    if (res["Record(s) updated"]["responseJSON"]["estado"]) {
+      window.alert(
+        `Doctor ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
+      );
+      window.location.href = "/doctores";
+    } else {
+      console.log(res["Record(s) updated"]["responseJSON"]);
+    }
+  });*/
+</script>
