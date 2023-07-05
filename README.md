@@ -54,7 +54,7 @@ DB_NAME=NAMEDATABASE
 - [Dotenv](https://www.npmjs.com/package/dotenv) <i class="fas fa-cog"></i>
 - [MySQL2](https://www.npmjs.com/package/mysql2) <i class="fas fa-database"></i>
 - [EJS](https://www.npmjs.com/package/ejs) <i class="far fa-file-code"></i>
-- [Moment](https://www.npmjs.com/package/moment) <i class="far fa-clock"></i>
+- [Moment](https://www.npmjs.com/package/moment) <i class="far fa-clock"></i>:clock1:
 
 **Sigue los pasos de la presentación de pasos en el repositorio -**
 
