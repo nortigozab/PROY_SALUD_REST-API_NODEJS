@@ -2,11 +2,12 @@
 <div class="container">
   <div class="d-flex justify-content-center align-items-center vh-100">
     <div>
-      <h1>Detalle Cita Medica</h1>
+      
       <% if (error) { %> <%= mensaje %>
       <a href="/citasmedicas" class="btn btn-dark btn-block my-2"> Volver </a>
       <% } %> <% if (!error) { %>
-      <form id="editar" data-id="<%= cita.citaId %>"></form>
+      <h1>Detalle Cita Medica</h1>
+      <form id="editar" data-id="<%= cita.citaId %>">
       <hr />
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default"
@@ -19,20 +20,8 @@
           name="numeroCedula"
           id="numeroCedulaInput"
         />
+        <input type="hidden" id="pacienteId" name="pacienteId" value="<%=cita.paciente.pacienteId%>">
         <div id="errornumeroCedula" class="invalid-feedback"></div>
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default"
-          >Fecha</span
-        >
-        <input
-          type="date"
-          value="<%= fechaFormateada %>"
-          class="form-control my-2 flex-grow-1"
-          name="fecha"
-          id="fechaInput"
-        />
-        <div id="errorfecha" class="invalid-feedback"></div>
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default">Especialidad</span>
@@ -46,7 +35,43 @@
         </select>
         <div id="errorEspecialidad" class="invalid-feedback"></div>
       </div>
-      
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default-span">Citas Medicas</span>
+        <select name="doctorEs" id="doctorEsSelect">
+          <option value="">.............</option> <!-- Opción por defecto -->
+          <% doctorEs.forEach(doctorE => { %>
+            <option value="<%= doctorE.doctorId %>" <%= cita.doctor.doctorId && doctorE.doctorId === cita.doctor.doctorId  ? 'selected' : '' %>>
+              <%= doctorE.nombre %> <%= doctorE.apellido %>
+            </option>
+          <% }) %>
+        </select>
+
+        <div id="errordoctorEs" class="invalid-feedback"></div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default"
+          >Fecha</span
+        >
+        <input
+          type="date"
+          value="<%=fechaFormateada %>"
+          class="form-control my-2 flex-grow-1"
+          name="fecha"
+          id="fechaInput"
+        />
+        <div id="errorfecha" class="invalid-feedback"></div>
+      </div>
+      <div class="row g-0 text-center">
+        <div class="col-sm-4 col-md-4"></div>
+        <div class="col-sm-4 col-md-4">
+          <button class="btn btn-warning btn-block" type="submit">
+            Editar
+          </button>
+        </div>
+        <div class="col-sm-4 col-md-4"></div>
+      </div>
+      <hr>
+    </form>
       <div class="row g-0 text-center">
         <div class="col-sm-4 col-md-4"></div>
         <div class="col-sm-4 col-md-4">
@@ -71,107 +96,305 @@
     }
   }
   const formEditar = document.querySelector("#editar");
-  const doctorId = formEditar.dataset.id;
   const especialidadSelect = document.querySelector("#especialidadSelect");
-  const especialidadId = especialidadSelect.value;
   
   document.addEventListener("DOMContentLoaded", function () {
-    console.log("Especialidad seleccionada inicialmente:", especialidadId);
-  });
-  // Escuchar el evento de cambio en el select de especialidad
-  especialidadSelect.addEventListener("change", function () {
-    console.log("Especialidad seleccionada:", especialidadId);
+    //Cuando inicia
   });
   
-              
-  /*formEditar.addEventListener("submit", async (e) => {
+  // Escuchar el evento de cambio en el select de especialidad
+  especialidadSelect.addEventListener("change", async (e) => {
     e.preventDefault();
-
-    // Capturar los valores de los campos del formulario
-    const nombre = formEditar.elements["nombre"].value;
-    const apellido = formEditar.elements["apellido"].value;
-    const especialidadId = formEditar.elements["especialidadId"].value;
-    const consultorioId = formEditar.elements["consultorioId"].value;
-    const correoContacto = correoContactoInput.value;
-    const doctorId = formEditar.dataset.id;
-
-    // Validar el correo electrónico utilizando la expresión regular
-    const emailRegex = /^[\w.-]+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/;
-    if (!emailRegex.test(correoContacto)) {
-      // Mostrar mensaje de error y resaltar el campo de entrada
-      errorCorreo.textContent = "Correo electrónico inválido";
-      errorCorreo.classList.add("d-block");
-      correoContactoInput.classList.add("is-invalid");
-
-      // Evitar la sumisión del formulario
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    // Validar que los campos no estén vacíos
-    // Validar que los campos no estén vacíos
-    if (
-      !nombre ||
-      !apellido ||
-      !especialidadId ||
-      !consultorioId ||
-      !correoContacto
-    ) {
-      // Mostrar mensaje de error y resaltar los campos vacíos
-      // Puedes agregar un mensaje específico para cada campo vacío si lo deseas
-      if (!nombre) {
-        document.getElementById("errorNombre").textContent =
-          "El nombre es obligatorio";
-        document.getElementById("errorNombre").classList.add("d-block");
-        nombreInput.classList.add("is-invalid");
-      }
-
-      if (!apellido) {
-        document.getElementById("errorApellido").textContent =
-          "El apellido es obligatorio";
-        document.getElementById("errorApellido").classList.add("d-block");
-        apellidoInput.classList.add("is-invalid");
-      }
-
-      // Repite para los demás campos vacíos
-
-      // Evitar la sumisión del formulario
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-
-    // Si la validación es exitosa, limpiar el mensaje de error y la clase de error
-    errorCorreo.textContent = "";
-    errorCorreo.classList.remove("d-block");
-    correoContactoInput.classList.remove("is-invalid");
-    const data = await fetch(`/doctores/${doctorId}`, {
-      method: "PUT",
+    const citaId = formEditar.dataset.id;
+    const especialidadId = especialidadSelect.value;
+  
+    const params = new URLSearchParams();
+    params.append("especialidadId", especialidadId);
+    params.append("numeroCedula","");
+    const url = `/citasmedicas/${citaId}?${params.toString()}`;
+  
+    const data = await fetch(url, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        nombre,
-        apellido,
-        especialidad: {
-          especialidadId,
-        },
-        consultorio: {
-          consultorioId,
-        },
-        correoContacto,
-        doctorId,
-      }),
     });
+    
+    const res = await data.json();  
+    // Accede a los datos de la respuesta JSON según sea necesario
+    console.log(res.doctorEs);
+    const doctorEs = res.doctorEs;
+    const cita = res.cita;
+    // Selecciona el elemento select en el DOM
+    const doctorEsSelect = document.querySelector("#doctorEsSelect");
+    const spanElement = document.getElementById("inputGroup-sizing-default-span");
+    // Limpia el contenido actual del select
+    doctorEsSelect.innerHTML = "";
+    spanElement.textContent = "Doctores";
+    // Genera las opciones del select basadas en los datos de doctorEs
+    const option = document.createElement("option");
+      option.value = "";
+      option.textContent = `...................`;
+      doctorEsSelect.appendChild(option);
+    doctorEs.forEach(doctorE => {
+      const option = document.createElement("option");
+      option.value = doctorE.doctorId;
+      option.textContent = `${doctorE.nombre} ${doctorE.apellido}`;
+  
+      // Agrega la opción al select
+      doctorEsSelect.appendChild(option);
+    });
+  });
+  formEditar.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const citaId= formEditar.dataset.id;
+    const especialidadId = formEditar.elements["especialidadId"].value;
+    const doctorId = formEditar.elements["doctorEs"].value;
+    const fecha = formEditar.elements["fecha"].value;
+    const numeroCedula = formEditar.elements["numeroCedula"].value;
+    const cedRegex = /^\d{1,10}\b$/;
 
-    const res = await data.json();
-    if (res["Record(s) updated"]["responseJSON"]["estado"]) {
-      window.alert(
-        `Doctor ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
-      );
-      window.location.href = "/doctores";
-    } else {
-      console.log(res["Record(s) updated"]["responseJSON"]);
+    if (!cedRegex.test(numeroCedula) && numeroCedula) {
+      // Mostrar mensaje de error y resaltar el campo de entrada
+      errornumeroCedula.textContent = "Cedula inválida";
+      errornumeroCedula.classList.add("d-block");
+      numeroCedulaInput.classList.add("is-invalid");
+
+      // Evitar la sumisión del formulario
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }else{
+      // Si la validación es exitosa, limpiar el mensaje de error y la clase de error
+      errornumeroCedula.textContent = "";
+      errornumeroCedula.classList.remove("d-block");
+      numeroCedulaInput.classList.remove("is-invalid");
     }
-  });*/
+    if (!especialidadId) {
+      document.getElementById("errorEspecialidad").textContent =
+        "La especialidad es obligatorio";
+      document.getElementById("errorEspecialidad").classList.add("d-block");
+      formEditar.elements["especialidadId"].classList.add("is-invalid");
+      e.preventDefault();
+    e.stopPropagation();
+    return;
+    }else{
+      document.getElementById("errorEspecialidad").textContent =
+      "";
+    document.getElementById("errorEspecialidad").classList.remove("d-block");
+    formEditar.elements["especialidadId"].classList.remove("is-invalid");
+    }
+
+    if (!doctorId) {
+      document.getElementById("errordoctorEs").textContent =
+        "El Doctor es obligatorio";
+      document.getElementById("errordoctorEs").classList.add("d-block");
+      formEditar.elements["doctorEs"].classList.add("is-invalid");
+      e.preventDefault();
+      e.stopPropagation();
+    return;
+    }else{
+      document.getElementById("errordoctorEs").textContent =
+        "";
+      document.getElementById("errordoctorEs").classList.remove("d-block");
+      formEditar.elements["doctorEs"].classList.remove("is-invalid");
+    }
+    if (!fecha) {
+      document.getElementById("errorfecha").textContent =
+        "La Fecha es obligatoria";
+      document
+        .getElementById("errorfecha")
+        .classList.add("d-block");
+      formEditar.elements["fecha"].classList.add("is-invalid");
+      e.preventDefault();
+    e.stopPropagation();
+    return;
+    }else{
+      document.getElementById("errorfecha").textContent =
+        "";
+      document
+        .getElementById("errorfecha")
+        .classList.remove("d-block");
+      formEditar.elements["fecha"].classList.remove("is-invalid");
+    }
+    if (cedRegex.test(numeroCedula) && numeroCedula) {
+      const params = new URLSearchParams();
+      params.append("especialidadId", especialidadId);
+      params.append("numeroCedula",numeroCedula);
+      const url = `/citasmedicas/${citaId}?${params.toString()}`;
+    numeroCedula
+      const data1 = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      const res1 = await data1.json();
+      const pacienteId= res1.paciente.pacienteId;
+      let disponibilidad=res1.cita.disponibilidad;
+      if(disponibilidad==1){
+        if(pacienteId){
+          disponibilidad= 0;
+          const data = await fetch(`/citasmedicas/${citaId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              doctor: {
+                doctorId
+              },
+              paciente: {
+                pacienteId,
+              },
+              especialidad: {
+                especialidadId,
+              },
+              fecha,
+              disponibilidad,
+              citaId,
+            }),
+          });
+      
+          const res = await data.json();
+          if (res["Record(s) updated"]["responseJSON"]["estado"]) {
+            window.alert(
+              `Cita ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
+            );
+            window.location.href = "/citasmedicas";
+          } else {
+            console.log(res["Record(s) updated"]["responseJSON"]);
+          }
+        }else{
+          window.alert(
+              `No Existe esa Cedula`
+            );
+        }
+      }else{
+        if(pacienteId){
+          const data = await fetch(`/citasmedicas/${citaId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              doctor: {
+                doctorId
+              },
+              paciente: {
+                pacienteId,
+              },
+              especialidad: {
+                especialidadId,
+              },
+              fecha,
+              disponibilidad,
+              citaId,
+            }),
+          });
+      
+          const res = await data.json();
+          if (res["Record(s) updated"]["responseJSON"]["estado"]) {
+            window.alert(
+              `Cita ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
+            );
+            window.location.href = "/citasmedicas";
+          } else {
+            console.log(res["Record(s) updated"]["responseJSON"]);
+          }
+        }else{
+          window.alert(
+              `No Existe esa Cedula`
+            );
+        }
+      }
+      
+
+    }else{
+      const params = new URLSearchParams();
+      params.append("especialidadId", especialidadId);
+      params.append("numeroCedula","");
+      const url = `/citasmedicas/${citaId}?${params.toString()}`;
+    numeroCedula
+      const data1 = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      const res1 = await data1.json();
+      const pacienteId= res1.paciente.pacienteId;
+      let disponibilidad=res1.cita.disponibilidad;
+      if(disponibilidad==1){
+          const data = await fetch(`/citasmedicas/${citaId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              doctor: {
+                doctorId
+              },
+              paciente: {
+                pacienteId,
+              },
+              especialidad: {
+                especialidadId,
+              },
+              fecha,
+              disponibilidad,
+              citaId,
+            }),
+          });
+      
+          const res = await data.json();
+          if (res["Record(s) updated"]["responseJSON"]["estado"]) {
+            window.alert(
+              `Cita ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
+            );
+            window.location.href = "/citasmedicas";
+          } else {
+            console.log(res["Record(s) updated"]["responseJSON"]);
+          }
+        
+      }else{
+        disponibilidad=1
+          const data = await fetch(`/citasmedicas/${citaId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              doctor: {
+                doctorId
+              },
+              paciente: {
+                pacienteId,
+              },
+              especialidad: {
+                especialidadId,
+              },
+              fecha,
+              disponibilidad,
+              citaId,
+            }),
+          });
+      
+          const res = await data.json();
+          if (res["Record(s) updated"]["responseJSON"]["estado"]) {
+            window.alert(
+              `Cita ${res["Record(s) updated"]["responseJSON"]["id"]} ${res["Record(s) updated"]["responseJSON"]["mensaje"]}`
+            );
+            window.location.href = "/citasmedicas";
+          } else {
+            console.log(res["Record(s) updated"]["responseJSON"]);
+          }
+        
+      }
+    }
+    
+    
+  });
 </script>
