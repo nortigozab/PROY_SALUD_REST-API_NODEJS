@@ -7,25 +7,46 @@ import {
 import { db } from "../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 export const create = (cita: CitaMedica, callback: Function) => {
-  const queryString =
-    "INSERT INTO CitasMedicas(IdDoctor, IdPaciente, Especialidad, Fecha, Disponibilidad)VALUES(?,?,?,?,?);";
-  db.query(
-    queryString,
-    [
-      cita.doctor,
-      cita.paciente,
-      cita.especialidad,
-      cita.fecha,
-      cita.disponibilidad,
-    ],
-    (err, result) => {
-      if (err) {
-        callback(err);
+  if (cita.paciente?.pacienteId) {
+    const queryString =
+      "INSERT INTO CitasMedicas(IdDoctor, IdPaciente, Especialidad, Fecha, Disponibilidad)VALUES(?,?,?,?,?);";
+    db.query(
+      queryString,
+      [
+        cita.doctor.doctorId,
+        cita.paciente?.pacienteId,
+        cita.especialidad.especialidadId,
+        cita.fecha,
+        cita.disponibilidad,
+      ],
+      (err, result) => {
+        if (err) {
+          callback(err);
+        }
+        const insertId = (<OkPacket>result).insertId;
+        callback(null, insertId);
       }
-      const insertId = (<OkPacket>result).insertId;
-      callback(null, insertId);
-    }
-  );
+    );
+  } else {
+    const queryString =
+      "INSERT INTO CitasMedicas(IdDoctor, Especialidad, Fecha, Disponibilidad)VALUES(?,?,?,?);";
+    db.query(
+      queryString,
+      [
+        cita.doctor.doctorId,
+        cita.especialidad.especialidadId,
+        cita.fecha,
+        cita.disponibilidad,
+      ],
+      (err, result) => {
+        if (err) {
+          callback(err);
+        }
+        const insertId = (<OkPacket>result).insertId;
+        callback(null, insertId);
+      }
+    );
+  }
 };
 export const findOne = (citaId: number, callback: Function) => {
   try {
@@ -153,7 +174,7 @@ FROM CitasMedicas cm
 JOIN Doctores d ON cm.IdDoctor = d.IdDoctor
 JOIN Especialidades e ON e.IdEspecialidad = cm.Especialidad AND e.IdEspecialidad = d.Especialidad
 JOIN Consultorios c ON c.IdConsultorio = d.Consultorio
-LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente order by cm.IdCita asc`;
+LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente order by cm.Disponibilidad desc,cm.IdCita ASC`;
 
   db.query(queryString, (err, result) => {
     if (err) {
