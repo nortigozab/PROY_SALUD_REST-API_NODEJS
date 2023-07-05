@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 # PROY_SALUD_REST-API
 ## Descripción
 El proyecto consiste en un aplicativo web (REST API) para la gestión de pacientes, doctores y citas médicas. Permite capturar información a través de formularios, almacenarla en una base de datos (MySQL) y mostrarla en páginas web utilizando DOM.
@@ -7,10 +9,11 @@ El proyecto consiste en un aplicativo web (REST API) para la gestión de pacient
 El objetivo es proporcionar una solución completa, eficiente y segura para la administración de datos médicos.
 
 ## Tecnologías utilizadas
-- [Node](https://nodejs.org/en)
-- [Express](https://expressjs.com/)
-- [MySQL](https://www.mysql.com)
-- [Typescript](https://nodejs.dev/en/learn/nodejs-with-typescript/)
+- [Node](https://nodejs.org/en) <i class="fab fa-node"></i>
+- [Express](https://expressjs.com/) <i class="fab fa-node-js"></i>
+- [MySQL](https://www.mysql.com) <i class="fas fa-database"></i>
+- [Typescript](https://nodejs.dev/en/learn/nodejs-with-typescript/) <i class="fab fa-js"></i>
+
 
 ## Instalación y Ejecución de la Aplicación :zap:
 
@@ -46,14 +49,27 @@ DB_NAME=NAMEDATABASE
 ```
 #### Además, este proyecto utiliza:
 
-- [TS-Nodemon](https://stackoverflow.com/questions/37979489/how-to-watch-and-reload-ts-node-when-typescript-files-change)
-- [body-parser](https://www.npmjs.com/package/body-parser)
-- [Dotenv](https://www.npmjs.com/package/dotenv)
-- [MySQL2](https://www.npmjs.com/package/mysql2)
-- [EJS](https://www.npmjs.com/package/ejs)
-- [Moment](https://www.npmjs.com/package/moment)
+- [TS-Nodemon](https://stackoverflow.com/questions/37979489/how-to-watch-and-reload-ts-node-when-typescript-files-change) <i class="fas fa-sync"></i>
+- [body-parser](https://www.npmjs.com/package/body-parser) <i class="fas fa-server"></i>
+- [Dotenv](https://www.npmjs.com/package/dotenv) <i class="fas fa-cog"></i>
+- [MySQL2](https://www.npmjs.com/package/mysql2) <i class="fas fa-database"></i>
+- [EJS](https://www.npmjs.com/package/ejs) <i class="far fa-file-code"></i>
+- [Moment](https://www.npmjs.com/package/moment) <i class="far fa-clock"></i>
 
 **Sigue los pasos de la presentación de pasos en el repositorio -**
+
+## Entorno de desarrollo
+
+La aplicación se desarrolló y probó en el siguiente entorno:
+
+- Sistema operativo: <i class="fab fa-linux"></i> Linux (derivado de Arch Linux, EndeavourOS)
+- Herramienta de desarrollo: <i class="fas fa-code"></i> VS Code
+- Base de datos: <i class="fas fa-database"></i> DBeaver
+- Navegador web: <i class="fab fa-chrome"></i> Google Chrome
+
+
+
+
 
 ## Linea de Tiempo
 
@@ -103,6 +119,6 @@ En esta versión se hace una prueba para citas médicas de forma gráfica, donde
   - Si se proporciona una cédula válida de un paciente, la cita se crea como ocupada.
   - De lo contrario, la cita se crea como disponible.
 
-| Descripcion | Soporte   |
-|:------------|---------: |
-| Se hace una cuarta prueba, ya de forma grafica       | ![Soporte 4](./img/4.gif?raw=true "import")       |
+| Descripcion | Soporte |
+|:------------|:-------:|
+| Se hace una cuarta prueba, ya de forma grafica | ![Soporte 4](./img/4.gif?raw=true "import") |
