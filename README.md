@@ -78,7 +78,7 @@ La aplicación se desarrolló y probó en el siguiente entorno:
 En esta versión se hace la prueba para doctores con un cliente local, utilizando la extensión Thunder Client en Visual Studio Code, donde estas peticiones son muy básicas.
 
 | Descripcion | Soporte   |
-|:------------|---------: |
+|:------------|:---------: |
 | Se hace una primera prueba, con una extensión de vscode llamada thunder Client que hace una ejecucion tipo postman            | ![Soporte 1](./img/1.gif?raw=true "import")       |
 
 ### Prueba #2
@@ -93,7 +93,7 @@ En esta versión se hace una prueba para doctores de forma gráfica, donde se pu
   - Consultorio: Asigna un consultorio si está disponible.
 
 | Descripcion | Soporte   |
-|:------------|---------: |
+|:------------|:---------: |
 | Se hace una segunda prueba, ya de forma grafica       | ![Soporte 2](./img/2.gif?raw=true "import")       |
 
 ### Prueba #3
@@ -104,9 +104,9 @@ En esta versión se hace una prueba para pacientes de forma gráfica, donde se p
 - Edición de un paciente, donde se puede cambiar el nombre, apellido, cédula, fecha de nacimiento y teléfono.
 - Creación de un nuevo paciente.
 
-| Descripcion | Soporte   |
-|:------------|---------: |
-| Se hace una tercera prueba, ya de forma grafica       | ![Soporte 3](./img/3.gif?raw=true "import")       |
+| Descripcion | Soporte |
+|:------------|:------:|
+| Se hace una tercera prueba, ya de forma grafica | ![Soporte 3](./img/3.gif?raw=true "import") |
 
 ### Prueba #4
 
