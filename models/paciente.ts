@@ -49,7 +49,34 @@ export const findOne = (pacienteId: number, callback: Function) => {
     }
   });
 };
+export const findOneCel = (numeroCedula: string, callback: Function) => {
+  const queryString = "SELECT * FROM Pacientes WHERE NumeroCedula=?";
 
+  db.query(queryString, numeroCedula, (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      const row = (<RowDataPacket[]>result)[0];
+      if (!row) {
+        callback(
+          new Error(
+            "Error, No se encontró ningún paciente con el ID proporcionado."
+          )
+        );
+      } else {
+        const paciente: Paciente = {
+          pacienteId: row.IdPaciente,
+          nombre: row.Nombre,
+          apellido: row.Apellido,
+          numeroCedula: row.NumeroCedula,
+          fechaNacimiento: row.FechaNacimiento,
+          telefono: row.Telefono,
+        };
+        callback(null, paciente);
+      }
+    }
+  });
+};
 export const findAll = (callback: Function) => {
   const queryString = "SELECT * FROM Pacientes ORDER BY IdPaciente ASC";
 
@@ -93,7 +120,6 @@ export const update = (paciente: Paciente, callback: Function) => {
       if (err) {
         callback(err);
       }
-
       const numUpdate = (<OkPacket>result).affectedRows;
       const responseJSON = {
         estado: true,
