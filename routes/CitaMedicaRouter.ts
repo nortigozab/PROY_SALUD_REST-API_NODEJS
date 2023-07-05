@@ -1,9 +1,12 @@
 import express, { Request, Response } from "express";
 import * as citaMedicaModel from "../models/citaMedica";
 import * as especialidadModel from "../models/especialidad";
+import * as pacienteModel from "../models/paciente";
 import * as doctorModel from "../models/doctor";
 import moment from "moment";
 import { BasicEspecialidad, Especialidad } from "../types/especialidad";
+import { Doctor, DoctorWithDetails } from "../types/doctor";
+import { BasicPaciente } from "../types/paciente";
 import {
   BasicCitaMedica,
   CitaMedica,
@@ -11,7 +14,133 @@ import {
 } from "../types/citaMedica";
 
 const citaMedicaRouter = express.Router();
-
+citaMedicaRouter.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const citaId = Number(req.params.id);
+    if (Object.keys(req.query).length === 0) {
+      citaMedicaModel.findOne(
+        citaId,
+        (errC: Error, cita: CitaMedicaWithDetails) => {
+          if (errC) {
+            res.render("detaCit", {
+              error: true,
+              mensaje: errC,
+            });
+          } else if (!cita || !cita.fecha) {
+            res.render("detaCit", {
+              error: true,
+              mensaje: errC,
+            });
+          } else {
+            especialidadModel.findAll(
+              (err: Error, especialidades: Especialidad[]) => {
+                if (err) {
+                  return res.status(500).json({ errorMessage: err.message });
+                }
+                doctorModel.findAllEspe(
+                  Number(cita.especialidad.especialidadId),
+                  (errC: Error, doctorEs: DoctorWithDetails[]) => {
+                    if (errC) {
+                      res.render("detaCit", {
+                        error: true,
+                        mensaje: errC,
+                      });
+                    }
+                    //res.status(200).json({ data: cita });
+                    const fechaFormateada = moment(cita.fecha).format(
+                      "YYYY-MM-DD"
+                    );
+                    res.render("detaCit", {
+                      cita: cita,
+                      fechaFormateada: fechaFormateada,
+                      especialidades: especialidades,
+                      doctorEs: doctorEs,
+                      error: false,
+                      mensaje: "",
+                    });
+                  }
+                );
+              }
+            );
+          }
+        }
+      );
+    } else {
+      citaMedicaModel.findOne(
+        citaId,
+        (errC: Error, cita: CitaMedicaWithDetails) => {
+          if (errC) {
+            res.render("detaCit", {
+              error: true,
+              mensaje: errC,
+            });
+          } else if (!cita || !cita.fecha) {
+            res.render("detaCit", {
+              error: true,
+              mensaje: errC,
+            });
+          } else {
+            especialidadModel.findAll(
+              (err: Error, especialidades: Especialidad[]) => {
+                if (err) {
+                  return res.status(500).json({ errorMessage: err.message });
+                }
+                doctorModel.findAllEspe(
+                  Number(req.query.especialidadId),
+                  (errC: Error, doctorEs: DoctorWithDetails[]) => {
+                    if (errC) {
+                      res.render("detaCit", {
+                        error: true,
+                        mensaje: errC,
+                      });
+                    }
+                    pacienteModel.findOneCel(
+                      String(req.query.numeroCedula),
+                      (errC: Error, paciente: BasicPaciente) => {
+                        if (errC) {
+                          const response = {
+                            cita: cita,
+                            especialidades: especialidades,
+                            especialidadOld: req.query.especialidadOld,
+                            numeroCedula: req.query.numeroCedula,
+                            doctorEs: doctorEs,
+                            paciente: errC,
+                            error: false,
+                            mensaje: "",
+                          };
+                          res.json(response);
+                        } else {
+                          //res.status(200).json({ data: cita });
+                          const response = {
+                            cita: cita,
+                            especialidades: especialidades,
+                            especialidadOld: req.query.especialidadOld,
+                            numeroCedula: req.query.numeroCedula,
+                            doctorEs: doctorEs,
+                            paciente: paciente,
+                            error: false,
+                            mensaje: "",
+                          };
+                          res.json(response);
+                        }
+                      }
+                    );
+                  }
+                );
+              }
+            );
+          }
+        }
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    res.render("detaCit", {
+      error: true,
+      mensaje: "No se encuentra el documento...",
+    });
+  }
+});
 citaMedicaRouter.get("/", async (req: Request, res: Response) => {
   try {
     citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
@@ -38,147 +167,21 @@ citaMedicaRouter.get("/", async (req: Request, res: Response) => {
     console.log(error);
   }
 });
-citaMedicaRouter.get("/:id", async (req: Request, res: Response) => {
+citaMedicaRouter.put("/:id", async (req: Request, res: Response) => {
   try {
-    const citaId = Number(req.params.id);
-    citaMedicaModel.findOne(
-      citaId,
-      (errC: Error, cita: CitaMedicaWithDetails) => {
-        if (errC) {
-          res.render("detaCit", {
-            error: true,
-            mensaje: errC,
-          });
-        } else if (!cita || !cita.fecha) {
-          res.render("detaCit", {
-            error: true,
-            mensaje: errC,
-          });
-        } else {
-          const fechaFormateada = moment(cita.fecha).format("YYYY-MM-DD");
-          especialidadModel.findAll(
-            (err: Error, especialidades: Especialidad[]) => {
-              if (err) {
-                return res.status(500).json({ errorMessage: err.message });
-              }
-              res.render("detaCit", {
-                cita: cita,
-                especialidades: especialidades,
-                fechaFormateada: fechaFormateada,
-                error: false,
-                mensaje: "",
-              });
-            }
-          );
-        }
+    const cita: CitaMedica = req.body;
+    citaMedicaModel.update(cita, (err: Error, numUpdate: number) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
       }
-    );
+
+      res.status(200).json({ "Record(s) updated": numUpdate });
+    });
   } catch (error) {
     console.log(error);
-    res.render("detaCit", {
-      error: true,
-      mensaje: "No se encuentra el documento...",
-    });
   }
 });
-citaMedicaRouter.get(
-  "/:id/:especialidadId",
-  async (req: Request, res: Response) => {
-    try {
-      const citaId = Number(req.params.id);
-      citaMedicaModel.findOne(
-        citaId,
-        (errC: Error, cita: CitaMedicaWithDetails) => {
-          if (errC) {
-            res.render("detaCit", {
-              error: true,
-              mensaje: errC,
-            });
-          } else if (!cita || !cita.fecha) {
-            res.render("detaCit", {
-              error: true,
-              mensaje: errC,
-            });
-          } else {
-            const fechaFormateada = moment(cita.fecha).format("YYYY-MM-DD");
-            especialidadModel.findAll(
-              (err: Error, especialidades: Especialidad[]) => {
-                if (err) {
-                  return res.status(500).json({ errorMessage: err.message });
-                }
-                const especialidadId = Number(req.params.especialidadId);
-                //Agregar la parte de doctores por especialidad
-                res.render("detaCit", {
-                  cita: cita,
-                  especialidades: especialidades,
-                  fechaFormateada: fechaFormateada,
-                  error: false,
-                  mensaje: "",
-                });
-              }
-            );
-          }
-        }
-      );
-    } catch (error) {}
-    // Resto del código para la ruta "/:id/:otraVariable"
-  }
-);
 /*
-citaMedicaRouter.get(
-  "/:id/:especialidadId",
-  async (req: Request, res: Response) => {
-    try {
-      const citaId = Number(req.params.id);
-      citaMedicaModel.findOne(
-        citaId,
-        (errC: Error, cita: CitaMedicaWithDetails) => {
-          if (errC) {
-            res.render("detaCit", {
-              error: true,
-              mensaje: errC,
-            });
-          } else if (!cita || !cita.fecha) {
-            res.render("detaCit", {
-              error: true,
-              mensaje: errC,
-            });
-          } else {
-            const fechaFormateada = moment(cita.fecha).format("YYYY-MM-DD");
-            especialidadModel.findAll(
-              (err: Error, especialidades: Especialidad[]) => {
-                if (err) {
-                  return res.status(500).json({ errorMessage: err.message });
-                }
-                const especialidadId = Number(req.params.especialidadId);
-                citaMedicaModel.findAllEspe(
-                  especialidadId,
-                  (errC: Error, citasEspe: CitaMedicaWithDetails[]) => {
-                    if (errC) {
-                      return res
-                        .status(500)
-                        .json({ errorMessage: errC.message });
-                    } else {
-                      res.render("detaCit", {
-                        cita: cita,
-                        especialidades: especialidades,
-                        fechaFormateada: fechaFormateada,
-                        citasEspe: citasEspe,
-                        error: false,
-                        mensaje: "",
-                      });
-                    }
-                  }
-                );
-              }
-            );
-          }
-        }
-      );
-    } catch (error) {}
-    // Resto del código para la ruta "/:id/:otraVariable"
-  }
-);
 citaMedicaRouter.get("/crear", async (req: Request, res: Response) => {
   try {
     especialidadModel.findAll((err: Error, especialidades: Especialidad[]) => {
@@ -267,21 +270,6 @@ citaMedicaRouter.get("/crear", async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
-  }
-});
-
-citaMedicaRouter.put("/:id", async (req: Request, res: Response) => {
-  try {
-    const doctor: Doctor = req.body;
-    doctorModel.update(doctor, (err: Error, numUpdate: number) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      }
-
-      res.status(200).json({ "Record(s) updated": numUpdate });
-    });
-  } catch (error) {
-    console.log(error);
   }
 });
 */
