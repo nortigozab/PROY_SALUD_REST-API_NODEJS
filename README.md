@@ -9,11 +9,11 @@ El proyecto consiste en un aplicativo web (REST API) para la gestión de pacient
 El objetivo es proporcionar una solución completa, eficiente y segura para la administración de datos médicos.
 
 ## Tecnologías utilizadas
-- [Node](https://nodejs.org/en) <i class="fab fa-node"></i>
-- [Express](https://expressjs.com/) <i class="fab fa-node-js"></i>
-- [MySQL](https://www.mysql.com) <i class="fas fa-database"></i>
-- [Typescript](https://nodejs.dev/en/learn/nodejs-with-typescript/) <i class="fab fa-js"></i>
 
+- [Node](https://nodejs.org/en) <i class="fab fa-node"></i> :green_circle:
+- [Express](https://expressjs.com/) <i class="fab fa-node-js"></i> :arrows_counterclockwise:
+- [MySQL](https://www.mysql.com) <i class="fas fa-database"></i> :floppy_disk:
+- [Typescript](https://nodejs.dev/en/learn/nodejs-with-typescript/) <i class="fab fa-js"></i> :blue_book:
 
 ## Instalación y Ejecución de la Aplicación :zap:
 
@@ -37,7 +37,7 @@ El objetivo es proporcionar una solución completa, eficiente y segura para la a
    ```
 **4.** **🎉 Open your browser and test the rest of the API at this URL `https://127.0.0.1:3000`**
 
-Recuerda que se debe crear el archivo .env para que la API funcione.
+:key:Recuerda que se debe crear el archivo .env para que la API funcione.
 - Asegurese que debe tener el nombre **.env**
 - Ingresar los datos segun esta estructura 
 ```bash
@@ -49,12 +49,16 @@ DB_NAME=NAMEDATABASE
 ```
 #### Además, este proyecto utiliza:
 
-- [TS-Nodemon](https://stackoverflow.com/questions/37979489/how-to-watch-and-reload-ts-node-when-typescript-files-change) <i class="fas fa-sync"></i>
-- [body-parser](https://www.npmjs.com/package/body-parser) <i class="fas fa-server"></i>
-- [Dotenv](https://www.npmjs.com/package/dotenv) <i class="fas fa-cog"></i>
-- [MySQL2](https://www.npmjs.com/package/mysql2) <i class="fas fa-database"></i>
-- [EJS](https://www.npmjs.com/package/ejs) <i class="far fa-file-code"></i>
-- [Moment](https://www.npmjs.com/package/moment) <i class="far fa-clock"></i>:clock1:
+
+
+- [TS-Nodemon](https://stackoverflow.com/questions/37979489/how-to-watch-and-reload-ts-node-when-typescript-files-change) <i class="fas fa-sync"></i> :arrows_counterclockwise:
+- [body-parser](https://www.npmjs.com/package/body-parser) <i class="fas fa-server"></i> :computer:
+- [Dotenv](https://www.npmjs.com/package/dotenv) <i class="fas fa-cog"></i> :gear:
+- [MySQL2](https://www.npmjs.com/package/mysql2) <i class="fas fa-database"></i> :floppy_disk:
+- [EJS](https://www.npmjs.com/package/ejs) <i class="far fa-file-code"></i> :card_index:
+- [Moment](https://www.npmjs.com/package/moment) <i class="far fa-clock"></i> :clock1:
+
+
 
 **Sigue los pasos de la presentación de pasos en el repositorio -**
 
@@ -62,10 +66,11 @@ DB_NAME=NAMEDATABASE
 
 La aplicación se desarrolló y probó en el siguiente entorno:
 
-- Sistema operativo: <i class="fab fa-linux"></i> Linux (derivado de Arch Linux, EndeavourOS)
-- Herramienta de desarrollo: <i class="fas fa-code"></i> VS Code
-- Base de datos: <i class="fas fa-database"></i> DBeaver
-- Navegador web: <i class="fab fa-chrome"></i> Google Chrome
+- Sistema operativo: <i class="fab fa-linux"></i> Linux (derivado de Arch Linux, EndeavourOS) :penguin:
+- Herramienta de desarrollo: <i class="fas fa-code"></i> VS Code :computer:
+- Base de datos: <i class="fas fa-database"></i> DBeaver :floppy_disk:
+- Navegador web: <i class="fab fa-chrome"></i> Google Chrome :globe_with_meridians:
+
 
 
 
