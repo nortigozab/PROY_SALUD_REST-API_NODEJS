@@ -52,6 +52,7 @@ DB_NAME=NAMEDATABASE
 
 
 - [TS-Nodemon](https://stackoverflow.com/questions/37979489/how-to-watch-and-reload-ts-node-when-typescript-files-change) <i class="fas fa-sync"></i> :arrows_counterclockwise:
+- [Bootstrap](https://getbootstrap.com/) <i class="fab fa-bootstrap"></i> :blue_book:
 - [body-parser](https://www.npmjs.com/package/body-parser) <i class="fas fa-server"></i> :computer:
 - [Dotenv](https://www.npmjs.com/package/dotenv) <i class="fas fa-cog"></i> :gear:
 - [MySQL2](https://www.npmjs.com/package/mysql2) <i class="fas fa-database"></i> :floppy_disk:
