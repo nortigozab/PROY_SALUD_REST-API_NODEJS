@@ -14,6 +14,64 @@ import {
 } from "../types/citaMedica";
 
 const citaMedicaRouter = express.Router();
+citaMedicaRouter.get("/crear", async (req: Request, res: Response) => {
+  try {
+    if (Object.keys(req.query).length === 0) {
+      especialidadModel.findAll(
+        (err: Error, especialidades: Especialidad[]) => {
+          if (err) {
+            return res.status(500).json({ errorMessage: err.message });
+          }
+          res.render("crearCit", {
+            cita: "",
+            fechaFormateada: "",
+            especialidades: especialidades,
+            doctorEs: "",
+            error: false,
+            mensaje: "",
+          });
+          //res.status(200).json({ data: doctores });
+        }
+      );
+    } else {
+      doctorModel.findAllEspe(
+        Number(req.query.especialidadId),
+        (errC: Error, doctorEs: DoctorWithDetails[]) => {
+          if (errC) {
+            res.render("detaCit", {
+              error: true,
+              mensaje: errC,
+            });
+          }
+          pacienteModel.findOneCel(
+            String(req.query.numeroCedula),
+            (errC: Error, paciente: BasicPaciente) => {
+              if (errC) {
+                const response = {
+                  numeroCedula: req.query.numeroCedula,
+                  doctorEs: doctorEs,
+                  paciente: errC,
+                };
+                res.json(response);
+              } else {
+                //res.status(200).json({ data: cita });
+                const response = {
+                  numeroCedula: req.query.numeroCedula,
+                  doctorEs: doctorEs,
+                  paciente: paciente,
+                };
+                res.json(response);
+              }
+            }
+          );
+        }
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 citaMedicaRouter.get("/:id", async (req: Request, res: Response) => {
   try {
     const citaId = Number(req.params.id);
@@ -181,96 +239,172 @@ citaMedicaRouter.put("/:id", async (req: Request, res: Response) => {
     console.log(error);
   }
 });
-/*
-citaMedicaRouter.get("/crear", async (req: Request, res: Response) => {
+
+citaMedicaRouter.post("/", async (req: Request, res: Response) => {
   try {
-    especialidadModel.findAll((err: Error, especialidades: Especialidad[]) => {
-      if (err) {
-        return res.status(500).json({ errorMessage: err.message });
-      }
-      consultorioModel.findOneTrue((err: Error, consultorio: Consultorio[]) => {
-        if (err) {
-          return res.status(500).json({ errorMessage: err.message });
+    if (req.body.numeroCedula) {
+      pacienteModel.findOneCel(
+        String(req.body.numeroCedula),
+        (errC: Error, paciente: BasicPaciente) => {
+          if (errC) {
+            citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
+              if (err) {
+                return res.status(500).json({ errorMessage: err.message });
+              }
+              const citasFormateadas = citas.map((cita) => {
+                const fecha = moment(cita.fecha).format("ddd, DD  MMM  YYYY");
+                return {
+                  ...cita,
+                  fecha: fecha,
+                };
+              });
+              res.render("citasmedicas", {
+                citas: citasFormateadas,
+                error: {
+                  mensaje: errC.message,
+                  r: true,
+                },
+              });
+              //res.status(200).json({ data: citasFormateadas });
+            });
+          } else {
+            //res.status(200).json({ data: cita });
+            const data = {
+              doctor: {
+                doctorId: req.body.doctorEs,
+              },
+              paciente: {
+                pacienteId: paciente.pacienteId,
+              },
+              especialidad: {
+                especialidadId: req.body.especialidadId,
+              },
+              fecha: req.body.fecha,
+              disponibilidad: false,
+              citaId: 0,
+            };
+            const newCita: CitaMedica = data;
+            citaMedicaModel.create(
+              newCita,
+              (errP: Error, pacienteId: number) => {
+                if (errP) {
+                  citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
+                    if (err) {
+                      return res
+                        .status(500)
+                        .json({ errorMessage: err.message });
+                    }
+                    const citasFormateadas = citas.map((cita) => {
+                      const fecha = moment(cita.fecha).format(
+                        "ddd, DD  MMM  YYYY"
+                      );
+                      return {
+                        ...cita,
+                        fecha: fecha,
+                      };
+                    });
+                    res.render("citasmedicas", {
+                      citas: citasFormateadas,
+                      error: {
+                        mensaje: errP.message,
+                        r: true,
+                      },
+                    });
+                    //res.status(200).json({ data: citasFormateadas });
+                  });
+                }
+                citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
+                  if (err) {
+                    return res.status(500).json({ errorMessage: err.message });
+                  }
+                  const citasFormateadas = citas.map((cita) => {
+                    const fecha = moment(cita.fecha).format(
+                      "ddd, DD  MMM  YYYY"
+                    );
+                    return {
+                      ...cita,
+                      fecha: fecha,
+                    };
+                  });
+                  res.render("citasmedicas", {
+                    citas: citasFormateadas,
+                    error: {
+                      mensaje: "Creado con exito",
+                      r: false,
+                    },
+                  });
+                  //res.status(200).json({ data: citasFormateadas });
+                });
+              }
+            );
+          }
         }
-        res.render("crearDoc", {
-          especialidades: especialidades,
-          consultorio: consultorio,
-        });
-        //res.status(200).json({ data: doctores });
-      });
-      //res.status(200).json({ data: doctores });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});*/
-/*citaMedicaRouter.post("/", async (req: Request, res: Response) => {
-  try {
-    const data = {
-      doctorId: 0,
-      nombre: req.body.nombre,
-      apellido: req.body.apellido,
-      especialidad: {
-        especialidadId: req.body.especialidadId,
-      },
-      consultorio: {
-        consultorioId: req.body.consultorioId,
-      },
-      correoContacto: req.body.correoContacto,
-    };
-    const newDoctor: Doctor = data;
-    doctorModel.create(newDoctor, (errP: Error, doctorId: number) => {
-      if (errP) {
-        doctorModel.findAll((err: Error, doctores: Doctor[]) => {
+      );
+    } else {
+      const data = {
+        doctor: {
+          doctorId: req.body.doctorEs,
+        },
+        paciente: {
+          pacienteId: req.body.numeroCedula,
+        },
+        especialidad: {
+          especialidadId: req.body.especialidadId,
+        },
+        fecha: req.body.fecha,
+        disponibilidad: true,
+        citaId: 0,
+      };
+      const newCita: CitaMedica = data;
+      citaMedicaModel.create(newCita, (errP: Error, pacienteId: number) => {
+        if (errP) {
+          citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
+            if (err) {
+              return res.status(500).json({ errorMessage: err.message });
+            }
+            const citasFormateadas = citas.map((cita) => {
+              const fecha = moment(cita.fecha).format("ddd, DD  MMM  YYYY");
+              return {
+                ...cita,
+                fecha: fecha,
+              };
+            });
+            res.render("citasmedicas", {
+              citas: citasFormateadas,
+              error: {
+                mensaje: errP.message,
+                r: true,
+              },
+            });
+            //res.status(200).json({ data: citasFormateadas });
+          });
+        }
+        citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
           if (err) {
             return res.status(500).json({ errorMessage: err.message });
           }
-          res.render("doctores", {
-            doctores: doctores,
+          const citasFormateadas = citas.map((cita) => {
+            const fecha = moment(cita.fecha).format("ddd, DD  MMM  YYYY");
+            return {
+              ...cita,
+              fecha: fecha,
+            };
+          });
+          res.render("citasmedicas", {
+            citas: citasFormateadas,
             error: {
-              mensaje: errP.message,
-              r: true,
+              mensaje: "Creado con exito",
+              r: false,
             },
           });
-          //res.status(200).json({ data: doctores });
+          //res.status(200).json({ data: citasFormateadas });
         });
-        //return res.status(500).json({ message: "Error al crear el doctor" });
-      }
-      consultorioModel.findOne(
-        data.consultorio.consultorioId,
-        (err: Error, consultorio: Consultorio) => {
-          if (err) {
-            return res.status(500).json({ message: err.message });
-          }
-          consultorio.disponibilidad = false;
-          consultorioModel.update(
-            consultorio,
-            (err: Error, numUpdate: number) => {
-              if (err) {
-                return res.status(500).json({ message: err.message });
-              }
-              doctorModel.findAll((err: Error, doctores: Doctor[]) => {
-                if (err) {
-                  return res.status(500).json({ errorMessage: err.message });
-                }
-                res.render("doctores", {
-                  doctores: doctores,
-                  error: {
-                    mensaje: doctorId + " Creado con exito",
-                    r: false,
-                  },
-                });
-                //res.status(200).json({ data: doctores });
-              });
-            }
-          );
-        }
-      );
-    });
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
   }
 });
-*/
+
 export { citaMedicaRouter };
