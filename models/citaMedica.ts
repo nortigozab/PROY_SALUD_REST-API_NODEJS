@@ -97,7 +97,7 @@ FROM CitasMedicas cm
 JOIN Doctores d ON cm.IdDoctor = d.IdDoctor
 JOIN Especialidades e ON e.IdEspecialidad = cm.Especialidad AND e.IdEspecialidad = d.Especialidad
 JOIN Consultorios c ON c.IdConsultorio = d.Consultorio
-LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente WHERE e.IdEspecialidad=? and cm.Disponibilidad=true`;
+LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente WHERE e.IdEspecialidad=?`;
 
   db.query(queryString, especialidadId, (err, result) => {
     if (err) {
@@ -203,26 +203,31 @@ LEFT JOIN Pacientes p ON cm.IdPaciente = p.IdPaciente order by cm.IdCita asc`;
   });
 };
 export const update = (cita: CitaMedica, callback: Function) => {
-  const queryString = `UPDATE salud.CitasMedicas
+  const queryString = `UPDATE CitasMedicas
     SET IdDoctor=?, IdPaciente=?, Especialidad=?, Fecha=?, Disponibilidad=?
     WHERE IdCita=?`;
 
   db.query(
     queryString,
     [
-      cita.doctor,
-      cita.paciente,
-      cita.especialidad,
+      cita.doctor?.doctorId,
+      cita.paciente?.pacienteId,
+      cita.especialidad.especialidadId,
       cita.fecha,
       cita.disponibilidad,
+      cita.citaId,
     ],
     (err, result) => {
       if (err) {
         callback(err);
       }
-
       const numUpdate = (<OkPacket>result).affectedRows;
-      callback(null, numUpdate);
+      const responseJSON = {
+        estado: true,
+        id: cita.citaId,
+        mensaje: "Operación exitosa",
+      };
+      callback(null, { numUpdate, responseJSON });
     }
   );
 };
