@@ -1,0 +1,195 @@
+<%- include("template/cabecera", {tituloWeb: 'Cita Medica' }) %>
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div>
+      <% if (error) { %> <%= mensaje %>
+      <a href="/citasmedicas" class="btn btn-dark btn-block my-2"> Volver </a>
+      <% } %> <% if (!error) { %>
+      <h1>Crear Cita Medica</h1>
+      <form action="/citasmedicas" id="formCrearCita" method="post">
+        <hr />
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            ># Cédula</span
+          >
+          <input
+            type="text"
+            placeholder="Ingrese Cedula"
+            class="form-control my-2 flex-grow-1"
+            name="numeroCedula"
+            id="numeroCedulaInput"
+          />
+          <div id="errornumeroCedula" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Especialidad</span
+          >
+          <select name="especialidadId" id="especialidadSelect">
+            <option value="">.............</option>
+            <!-- Opción por defecto -->
+            <% especialidades.forEach(especialidad => { %>
+            <option value="<%= especialidad.especialidadId %>">
+              <%= especialidad.nombreEspecialidad %>
+            </option>
+            <% }) %>
+          </select>
+          <div id="errorEspecialidad" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default-span"
+            >Doctores</span
+          >
+          <select name="doctorEs" id="doctorEsSelect">
+            <option value="">.............</option>
+            <!-- Opción por defecto -->
+          </select>
+          <div
+            id="errordoctorEs"
+            class="invalid-feedback"
+            name="errordoctorEs"
+          ></div>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default"
+            >Fecha</span
+          >
+          <input
+            type="date"
+            class="form-control my-2 flex-grow-1"
+            name="fecha"
+            id="fechaInput"
+          />
+          <div id="errorfecha" class="invalid-feedback"></div>
+        </div>
+        <div class="input-group mb-3">
+          <button type="submit" class="btn btn-outline-success">Crear</button>
+        </div>
+        <hr />
+      </form>
+      <div class="row g-0 text-center">
+        <div class="col-sm-4 col-md-4"></div>
+        <div class="col-sm-4 col-md-4">
+          <button class="btn btn-danger" onclick="cancelar()">Cancelar</button>
+        </div>
+        <div class="col-sm-4 col-md-4"></div>
+      </div>
+
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include("template/footer") %>
+<script>
+  // onclick vs addEventListener
+  // https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick#:~:text=Essentially%20onclick%20is%20a%20HTML,(using%20this%20for%20example).
+  function cancelar() {
+    const confirmacion = confirm("¿Estás seguro de que quieres cancelar?");
+    if (confirmacion) {
+      window.location.href = "/citasmedicas";
+    }
+  }
+  const formCrearCita = document.getElementById("formCrearCita");
+  const formEditar = document.querySelector("#formCrearCita");
+  const especialidadSelect = document.getElementById("especialidadSelect");
+
+  // Escuchar el evento de cambio en el select de especialidad
+  especialidadSelect.addEventListener("change", async (event) => {
+    event.preventDefault();
+    const especialidadId = especialidadSelect.value;
+
+    const params = new URLSearchParams();
+    params.append("especialidadId", especialidadId);
+    const url = `/citasmedicas/crear/?${params.toString()}`;
+
+    const data = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const res = await data.json();
+    // Accede a los datos de la respuesta JSON según sea necesario
+    const doctorEs = res.doctorEs;
+    // seleccionamos el contenedor para ingresar la lista de doctores
+    const doctorEsSelect = document.querySelector("#doctorEsSelect");
+    const spanElement = document.getElementById(
+      "inputGroup-sizing-default-span"
+    );
+    // Limpia el contenido actual del select
+    doctorEsSelect.innerHTML = "";
+    spanElement.textContent = "Doctores";
+    // Genera las opciones del select basadas en los datos de doctorEs
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = `...................`;
+    doctorEsSelect.appendChild(option);
+    doctorEs.forEach((doctorE) => {
+      const option = document.createElement("option");
+      option.value = doctorE.doctorId;
+      option.textContent = `${doctorE.nombre} ${doctorE.apellido}`;
+
+      // Agrega la opción al select
+      doctorEsSelect.appendChild(option);
+    });
+  });
+
+  formCrearCita.addEventListener("submit", function (event) {
+    const numeroCedula = document.getElementById("numeroCedulaInput").value;
+    const especialidadId = especialidadSelect.value;
+    const doctorId = document.getElementById("doctorEsSelect").value;
+    const fecha = document.getElementById("fechaInput").value;
+    const cedRegex = /^\d{1,10}\b$/;
+    if (!cedRegex.test(numeroCedula) && numeroCedula) {
+      // Mostrar mensaje de error y resaltar el campo de entrada
+      errornumeroCedula.textContent = "Cédula inválida";
+      errornumeroCedula.classList.add("d-block");
+      numeroCedulaInput.classList.add("is-invalid");
+
+      // Evitar la sumisión del formulario
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    } else {
+      // Si la validación es exitosa, limpiar el mensaje de error y la clase de error
+      errornumeroCedula.textContent = "";
+      errornumeroCedula.classList.remove("d-block");
+      numeroCedulaInput.classList.remove("is-invalid");
+    }
+    if (!especialidadId) {
+      document.getElementById("errorEspecialidad").textContent =
+        "La especialidad es obligatoria";
+      document.getElementById("errorEspecialidad").classList.add("d-block");
+      formEditar.elements["especialidadId"].classList.add("is-invalid");
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    } else {
+      document.getElementById("errorEspecialidad").textContent = "";
+      document.getElementById("errorEspecialidad").classList.remove("d-block");
+      formEditar.elements["especialidadId"].classList.remove("is-invalid");
+    }
+
+    if (!doctorId) {
+      window.alert("Selecciona un Doctor");
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    if (!fecha) {
+      document.getElementById("errorfecha").textContent =
+        "La fecha es obligatoria";
+      document.getElementById("errorfecha").classList.add("d-block");
+      formEditar.elements["fecha"].classList.add("is-invalid");
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    } else {
+      document.getElementById("errorfecha").textContent = "";
+      document.getElementById("errorfecha").classList.remove("d-block");
+      formEditar.elements["fecha"].classList.remove("is-invalid");
+    }
+  });
+</script>
