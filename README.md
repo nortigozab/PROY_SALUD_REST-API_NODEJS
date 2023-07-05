@@ -71,9 +71,19 @@ La aplicación se desarrolló y probó en el siguiente entorno:
 - Base de datos: <i class="fas fa-database"></i> DBeaver :floppy_disk:
 - Navegador web: <i class="fab fa-chrome"></i> Google Chrome :globe_with_meridians:
 
+Aquí tienes la tabla en formato Markdown con los datos proporcionados:
 
+## Base de Datos SQL
 
+ ![database](./img/database.png?raw=true "import")
 
+|         Tabla      | Descripción                                                                                                                  |
+|---------------|------------------------------------------------------------------------------------------------------------------------------|
+| **Especialidades**  | Almacena las especialidades médicas disponibles en el sistema. Cada especialidad tiene un identificador único (IdEspecialidad) y un nombre (NombreEspecialidad). |
+| **Pacientes**       | Guarda la información de los pacientes. Cada paciente tiene un identificador único (IdPaciente), nombre, número de cédula, apellido, fecha de nacimiento y número de teléfono. |
+| **Consultorios**    | Contiene los consultorios disponibles para las citas médicas. Cada consultorio tiene un identificador único (IdConsultorio), piso, número de consultorio y disponibilidad. |
+| **Doctores**        | Almacena los datos de los doctores que atienden las citas médicas. Cada doctor tiene un identificador único (IdDoctor), nombre, apellido, especialidad, consultorio asignado y correo de contacto. La especialidad se relaciona con la tabla de Especialidades mediante una clave foránea. |
+| **CitasMedicas**    | Registra las citas médicas programadas. Cada cita tiene un identificador único (IdCita), doctor asignado, paciente, especialidad, fecha y disponibilidad. Tanto el doctor, el paciente y la especialidad se relacionan con sus respectivas tablas mediante claves foráneas. |
 
 
 ## Linea de Tiempo
