@@ -55,7 +55,7 @@
             >Especialidad</span
           >
           <select name="especialidadId" id="especialidadSelect">
-            <option value="">.............</option> <!-- Opción por defecto -->
+            <option value="">.............</option> 
             <% especialidades.forEach(especialidad => { %>
               <option value="<%= especialidad.especialidadId %>"><%= especialidad.nombreEspecialidad %></option>
             <% }) %>
@@ -137,13 +137,11 @@
     const emailRegex = /^[\w.-]+@[a-zA-Z_-]+?\.[a-zA-Z]{2,3}$/;
     
     formCrearDoctor.addEventListener('submit', function(event) {
-      // Obtener los valores de los campos del formulario
       const nombre = nombreInput.value;
       const apellido = apellidoInput.value;
       const correoContacto = correoContactoInput.value;
       const especialidadId = especialidadSelect.value;
     console.log(especialidadId);
-      // Validar nombre
       if (nombre.trim() === '') {
         errorNombre.textContent = 'El nombre es obligatorio';
         errorNombre.classList.add('d-block');
@@ -152,7 +150,6 @@
         return;
       }
     
-      // Validar apellido
       if (apellido.trim() === '') {
         errorApellido.textContent = 'El apellido es obligatorio';
         errorApellido.classList.add('d-block');
@@ -161,7 +158,6 @@
         return;
       }
     
-      // Validar correo electrónico
       if (!emailRegex.test(correoContacto)) {
         errorCorreo.textContent = 'Correo electrónico inválido';
         errorCorreo.classList.add('d-block');
@@ -170,7 +166,6 @@
         return;
       }
     
-      // Validar especialidad
       if (especialidadId === '') {
         errorEspecialidad.textContent = 'Seleccione una especialidad.';
         errorEspecialidad.classList.add('d-block');

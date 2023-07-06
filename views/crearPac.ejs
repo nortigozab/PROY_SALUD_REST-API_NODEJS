@@ -106,7 +106,6 @@ formCrearPaciente.addEventListener('submit', (event) => {
   const telefonoInput = document.getElementById('telefonoInput');
 
   if (!cedRegex.test(numeroCedulaInput.value)) {
-    // Mostrar mensaje de error
     document.querySelector("#errornumeroCedula").textContent =
           "Numero de Cedula no valido";
           document.querySelector("#errornumeroCedula").classList.add("d-block");
@@ -114,7 +113,6 @@ formCrearPaciente.addEventListener('submit', (event) => {
     return;
   }
 
-  // Validar número de teléfono
   if (!telRegex.test(telefonoInput.value)) {
     document.querySelector("#errortelefono").textContent =
     "Numero de telefono no valido";
@@ -122,13 +120,11 @@ formCrearPaciente.addEventListener('submit', (event) => {
   formCrearPaciente.element["telefono"].value.classList.add("is-invalid");
     return;
   }
-  // Validar campos vacíos
   if (
     nombreInput.value.trim() === '' ||
     apellidoInput.value.trim() === '' ||
     fechaNacimientoInput.value.trim() === ''
   ) {
-    // Mostrar mensaje de error
    if (nombreInput.value.trim() === ''){
     document.querySelector("#errorNombre").textContent =
     "nombre obligatorio";
@@ -151,7 +147,6 @@ formCrearPaciente.addEventListener('submit', (event) => {
   return;
    }
   }
-  // Si todos los campos son válidos, enviar el formulario
   formCrearPaciente.submit();
 });
 

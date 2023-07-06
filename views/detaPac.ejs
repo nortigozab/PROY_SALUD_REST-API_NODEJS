@@ -107,8 +107,6 @@
     const confirmacion = confirm("¿Estás seguro de que quieres cancelar?");
     if (confirmacion) {
       window.location.href = "/pacientes";
-    } else {
-      // Si el usuario cancela, no se hace nada
     }
   }
 
@@ -118,44 +116,32 @@
 
   formEditar.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    // Capturar los valores de los campos del formulario
     const nombre = formEditar.elements["nombre"].value;
     const apellido = formEditar.elements["apellido"].value;
     const fechaNacimiento = formEditar.elements["fechaNacimiento"].value;
     const telefono = formEditar.elements["telefono"].value;
     const numeroCedula = numeroCedulaInput.value;
     const pacienteId = formEditar.dataset.id;
-
-    // Validar el correo electrónico utilizando la expresión regular
     const telRegex = /^\d{10}$/;
     const cedRegex = /^\d{1,10}\b$/;
 
     if (!cedRegex.test(numeroCedula)) {
-      // Mostrar mensaje de error y resaltar el campo de entrada
       errornumeroCedula.textContent = "Cedula inválida";
       errornumeroCedula.classList.add("d-block");
       numeroCedulaInput.classList.add("is-invalid");
-
-      // Evitar la sumisión del formulario
       e.preventDefault();
       e.stopPropagation();
       return;
     }
     if (!telRegex.test(telefono)) {
-      // Mostrar mensaje de error y resaltar el campo de entrada
       document.getElementById("errortelefono").textContent =
         "Telefono inválido";
       document.getElementById("errortelefono").classList.add("d-block");
       formEditar.elements["telefono"].classList.add("is-invalid");
-
-      // Evitar la sumisión del formulario
       e.preventDefault();
       e.stopPropagation();
       return;
     }
-    // Validar que los campos no estén vacíos
-    // Validar que los campos no estén vacíos
     if (
       !nombre ||
       !apellido ||
@@ -163,8 +149,6 @@
       !telefono ||
       !numeroCedula
     ) {
-      // Mostrar mensaje de error y resaltar los campos vacíos
-      // Puedes agregar un mensaje específico para cada campo vacío si lo deseas
       if (!nombre) {
         document.getElementById("errorNombre").textContent =
           "El nombre es obligatorio";
@@ -186,7 +170,6 @@
           .classList.add("d-block");
         formEditar.elements["fechaNacimiento"].classList.add("is-invalid");
       }
-      // Evitar la sumisión del formulario
       e.preventDefault();
       e.stopPropagation();
       return;

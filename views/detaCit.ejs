@@ -26,7 +26,7 @@
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default">Especialidad</span>
         <select name="especialidadId" id="especialidadSelect">
-          <option value="">.............</option> <!-- Opción por defecto -->
+          <option value="">.............</option> 
           <% especialidades.forEach(especialidad => { %>
             <option value="<%= especialidad.especialidadId %>" <%= especialidad.especialidadId === cita.especialidad.especialidadId ? 'selected' : '' %>>
               <%= especialidad.nombreEspecialidad %>
@@ -38,7 +38,7 @@
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default-span">Citas Medicas</span>
         <select name="doctorEs" id="doctorEsSelect">
-          <option value="">.............</option> <!-- Opción por defecto -->
+          <option value="">.............</option>
           <% doctorEs.forEach(doctorE => { %>
             <option value="<%= doctorE.doctorId %>" <%= cita.doctor.doctorId && doctorE.doctorId === cita.doctor.doctorId  ? 'selected' : '' %>>
               <%= doctorE.nombre %> <%= doctorE.apellido %>
@@ -87,8 +87,6 @@
 
 <%- include("template/footer") %>
 <script>
-  // onclick vs addEventListener
-  // https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick#:~:text=Essentially%20onclick%20is%20a%20HTML,(using%20this%20for%20example).
   function cancelar() {
     const confirmacion = confirm("¿Estás seguro de que quieres cancelar?");
     if (confirmacion) {
@@ -98,11 +96,7 @@
   const formEditar = document.querySelector("#editar");
   const especialidadSelect = document.querySelector("#especialidadSelect");
   
-  document.addEventListener("DOMContentLoaded", function () {
-    //Cuando inicia
-  });
   
-  // Escuchar el evento de cambio en el select de especialidad
   especialidadSelect.addEventListener("change", async (e) => {
     e.preventDefault();
     const citaId = formEditar.dataset.id;
@@ -121,17 +115,13 @@
     });
     
     const res = await data.json();  
-    // Accede a los datos de la respuesta JSON según sea necesario
     console.log(res.doctorEs);
     const doctorEs = res.doctorEs;
     const cita = res.cita;
-    // Selecciona el elemento select en el DOM
     const doctorEsSelect = document.querySelector("#doctorEsSelect");
     const spanElement = document.getElementById("inputGroup-sizing-default-span");
-    // Limpia el contenido actual del select
     doctorEsSelect.innerHTML = "";
     spanElement.textContent = "Doctores";
-    // Genera las opciones del select basadas en los datos de doctorEs
     const option = document.createElement("option");
       option.value = "";
       option.textContent = `...................`;
@@ -140,8 +130,6 @@
       const option = document.createElement("option");
       option.value = doctorE.doctorId;
       option.textContent = `${doctorE.nombre} ${doctorE.apellido}`;
-  
-      // Agrega la opción al select
       doctorEsSelect.appendChild(option);
     });
   });
@@ -155,17 +143,13 @@
     const cedRegex = /^\d{1,10}\b$/;
 
     if (!cedRegex.test(numeroCedula) && numeroCedula) {
-      // Mostrar mensaje de error y resaltar el campo de entrada
       errornumeroCedula.textContent = "Cedula inválida";
       errornumeroCedula.classList.add("d-block");
       numeroCedulaInput.classList.add("is-invalid");
-
-      // Evitar la sumisión del formulario
       e.preventDefault();
       e.stopPropagation();
       return;
     }else{
-      // Si la validación es exitosa, limpiar el mensaje de error y la clase de error
       errornumeroCedula.textContent = "";
       errornumeroCedula.classList.remove("d-block");
       numeroCedulaInput.classList.remove("is-invalid");
