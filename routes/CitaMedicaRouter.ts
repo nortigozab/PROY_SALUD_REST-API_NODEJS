@@ -4,14 +4,10 @@ import * as especialidadModel from "../models/especialidad";
 import * as pacienteModel from "../models/paciente";
 import * as doctorModel from "../models/doctor";
 import moment from "moment";
-import { BasicEspecialidad, Especialidad } from "../types/especialidad";
-import { Doctor, DoctorWithDetails } from "../types/doctor";
+import { Especialidad } from "../types/especialidad";
+import { DoctorWithDetails } from "../types/doctor";
 import { BasicPaciente } from "../types/paciente";
-import {
-  BasicCitaMedica,
-  CitaMedica,
-  CitaMedicaWithDetails,
-} from "../types/citaMedica";
+import { CitaMedica, CitaMedicaWithDetails } from "../types/citaMedica";
 
 const citaMedicaRouter = express.Router();
 citaMedicaRouter.get("/crear", async (req: Request, res: Response) => {
@@ -30,7 +26,6 @@ citaMedicaRouter.get("/crear", async (req: Request, res: Response) => {
             error: false,
             mensaje: "",
           });
-          //res.status(200).json({ data: doctores });
         }
       );
     } else {
@@ -54,7 +49,6 @@ citaMedicaRouter.get("/crear", async (req: Request, res: Response) => {
                 };
                 res.json(response);
               } else {
-                //res.status(200).json({ data: cita });
                 const response = {
                   numeroCedula: req.query.numeroCedula,
                   doctorEs: doctorEs,
@@ -104,7 +98,6 @@ citaMedicaRouter.get("/:id", async (req: Request, res: Response) => {
                         mensaje: errC,
                       });
                     }
-                    //res.status(200).json({ data: cita });
                     const fechaFormateada = moment(cita.fecha).format(
                       "YYYY-MM-DD"
                     );
@@ -168,7 +161,6 @@ citaMedicaRouter.get("/:id", async (req: Request, res: Response) => {
                           };
                           res.json(response);
                         } else {
-                          //res.status(200).json({ data: cita });
                           const response = {
                             cita: cita,
                             especialidades: especialidades,
@@ -219,7 +211,6 @@ citaMedicaRouter.get("/", async (req: Request, res: Response) => {
           r: false,
         },
       });
-      //res.status(200).json({ data: citasFormateadas });
     });
   } catch (error) {
     console.log(error);
@@ -265,10 +256,8 @@ citaMedicaRouter.post("/", async (req: Request, res: Response) => {
                   r: true,
                 },
               });
-              //res.status(200).json({ data: citasFormateadas });
             });
           } else {
-            //res.status(200).json({ data: cita });
             const data = {
               doctor: {
                 doctorId: req.body.doctorEs,
@@ -310,7 +299,6 @@ citaMedicaRouter.post("/", async (req: Request, res: Response) => {
                         r: true,
                       },
                     });
-                    //res.status(200).json({ data: citasFormateadas });
                   });
                 }
                 citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
@@ -333,7 +321,6 @@ citaMedicaRouter.post("/", async (req: Request, res: Response) => {
                       r: false,
                     },
                   });
-                  //res.status(200).json({ data: citasFormateadas });
                 });
               }
             );
@@ -376,7 +363,6 @@ citaMedicaRouter.post("/", async (req: Request, res: Response) => {
                 r: true,
               },
             });
-            //res.status(200).json({ data: citasFormateadas });
           });
         }
         citaMedicaModel.findAll((err: Error, citas: CitaMedica[]) => {
@@ -397,7 +383,6 @@ citaMedicaRouter.post("/", async (req: Request, res: Response) => {
               r: false,
             },
           });
-          //res.status(200).json({ data: citasFormateadas });
         });
       });
     }

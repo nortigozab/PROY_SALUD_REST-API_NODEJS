@@ -11,7 +11,6 @@ pacienteRouter.get("/crear", async (req: Request, res: Response) => {
         return res.status(500).json({ errorMessage: err.message });
       }
       res.render("crearPac", {});
-      //res.status(200).json({ data: doctores });
     });
   } catch (error) {
     console.log(error);
@@ -44,7 +43,6 @@ pacienteRouter.get("/", async (req: Request, res: Response) => {
         r: false,
       },
     });
-    //res.status(200).json({ data: pacientes });
   });
 });
 pacienteRouter.post("/", async (req: Request, res: Response) => {
@@ -77,9 +75,7 @@ pacienteRouter.post("/", async (req: Request, res: Response) => {
             r: true,
           },
         });
-        //res.status(200).json({ data: pacientes });
       });
-      //return res.status(404).json({ message: errP.message });
     }
     pacienteModel.findAll((err: Error, pacientes: Paciente[]) => {
       if (err) {
@@ -107,7 +103,6 @@ pacienteRouter.post("/", async (req: Request, res: Response) => {
           r: false,
         },
       });
-      //res.status(200).json({ data: pacientes });
     });
   });
 });

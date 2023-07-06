@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import * as doctorModel from "../models/doctor";
 import * as consultorioModel from "../models/consultorio";
 import * as especialidadModel from "../models/especialidad";
-import { BasicConsultorio, Consultorio } from "../types/consultorio";
-import { BasicEspecialidad, Especialidad } from "../types/especialidad";
-import { BasicDoctor, Doctor, DoctorWithDetails } from "../types/doctor";
+import { Consultorio } from "../types/consultorio";
+import { Especialidad } from "../types/especialidad";
+import { Doctor } from "../types/doctor";
 
 const doctorRouter = express.Router();
 
@@ -22,9 +22,7 @@ doctorRouter.get("/crear", async (req: Request, res: Response) => {
           especialidades: especialidades,
           consultorio: consultorio,
         });
-        //res.status(200).json({ data: doctores });
       });
-      //res.status(200).json({ data: doctores });
     });
   } catch (error) {
     console.log(error);
@@ -43,7 +41,6 @@ doctorRouter.get("/", async (req: Request, res: Response) => {
           r: false,
         },
       });
-      //res.status(200).json({ data: doctores });
     });
   } catch (error) {
     console.log(error);
@@ -77,9 +74,7 @@ doctorRouter.post("/", async (req: Request, res: Response) => {
               r: true,
             },
           });
-          //res.status(200).json({ data: doctores });
         });
-        //return res.status(500).json({ message: "Error al crear el doctor" });
       }
       consultorioModel.findOne(
         data.consultorio.consultorioId,
@@ -105,7 +100,6 @@ doctorRouter.post("/", async (req: Request, res: Response) => {
                     r: false,
                   },
                 });
-                //res.status(200).json({ data: doctores });
               });
             }
           );
@@ -128,7 +122,6 @@ doctorRouter.get("/:id", async (req: Request, res: Response) => {
         doctor: doctor,
         error: false,
       });
-      //res.status(200).json({ data: doctor });
     });
   } catch (error) {
     console.log(error);
