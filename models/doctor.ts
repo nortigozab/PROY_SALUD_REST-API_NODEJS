@@ -4,7 +4,7 @@ import { db } from "../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 export const create = (doctor: Doctor, callback: Function) => {
   const queryString =
-    "INSERT INTO Doctores (Nombre, Apellido, Especialidad, Consultorio, CorreoContacto) VALUES(?, ?, ?, ?, ?)";
+    "INSERT INTO Doctores (IdDoctor,Nombre, Apellido, Especialidad, Consultorio, CorreoContacto) VALUES(REPLACE(UUID(), '-', ''),?, ?, ?, ?, ?)";
   db.query(
     queryString,
     [
@@ -59,7 +59,7 @@ export const findAllEspe = (especialidadId: number, callback: Function) => {
     callback(null, doctores);
   });
 };
-export const findOne = (doctorId: number, callback: Function) => {
+export const findOne = (doctorId: string, callback: Function) => {
   const queryString = `
     SELECT D.IdDoctor, D.Nombre, D.Apellido, E.IdEspecialidad, E.NombreEspecialidad, C.IdConsultorio, C.Piso, C.NumeroConsultorio, C.Disponibilidad, D.CorreoContacto
     FROM Doctores D
@@ -137,18 +137,11 @@ export const findAll = (callback: Function) => {
 };
 export const update = (doctor: Doctor, callback: Function) => {
   const queryString =
-    "UPDATE Doctores SET Nombre = ?, Apellido = ?, Especialidad = ?, Consultorio = ?, CorreoContacto = ?WHERE IdDoctor = ?";
+    "UPDATE Doctores SET Nombre = ?, Apellido = ?, CorreoContacto = ? WHERE IdDoctor = ?";
 
   db.query(
     queryString,
-    [
-      doctor.nombre,
-      doctor.apellido,
-      doctor.especialidad.especialidadId,
-      doctor.consultorio?.consultorioId,
-      doctor.correoContacto,
-      doctor.doctorId,
-    ],
+    [doctor.nombre, doctor.apellido, doctor.correoContacto, doctor.doctorId],
     (err, result) => {
       if (err) {
         const responseJSON = {

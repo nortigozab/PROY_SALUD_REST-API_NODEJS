@@ -3,7 +3,7 @@ import { BasicEspecialidad, Especialidad } from "./especialidad";
 import { BasicConsultorio, Consultorio } from "./consultorio";
 
 export interface BasicDoctor {
-  doctorId: number;
+  doctorId: string;
 }
 export interface Doctor extends BasicDoctor {
   especialidad: BasicEspecialidad;

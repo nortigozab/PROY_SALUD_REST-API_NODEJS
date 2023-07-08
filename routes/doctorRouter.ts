@@ -49,7 +49,7 @@ doctorRouter.get("/", async (req: Request, res: Response) => {
 doctorRouter.post("/", async (req: Request, res: Response) => {
   try {
     const data = {
-      doctorId: 0,
+      doctorId: "",
       nombre: req.body.nombre,
       apellido: req.body.apellido,
       especialidad: {
@@ -113,7 +113,7 @@ doctorRouter.post("/", async (req: Request, res: Response) => {
 });
 doctorRouter.get("/:id", async (req: Request, res: Response) => {
   try {
-    const doctorId = Number(req.params.id);
+    const doctorId = req.params.id;
     doctorModel.findOne(doctorId, (err: Error, doctor: Doctor) => {
       if (err) {
         return res.status(500).json({ message: err.message });
