@@ -4,7 +4,7 @@ import { db } from "../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 export const create = (paciente: Paciente, callback: Function) => {
   const queryString =
-    "INSERT INTO Pacientes(NumeroCedula,FechaNacimiento,Nombre,Apellido,Telefono) VALUES(?,?,?,?,?)";
+    "INSERT INTO Pacientes(IdPaciente,NumeroCedula,FechaNacimiento,Nombre,Apellido,Telefono) VALUES(REPLACE(UUID(), '-', ''),?,?,?,?,?)";
   db.query(
     queryString,
     [
@@ -17,13 +17,14 @@ export const create = (paciente: Paciente, callback: Function) => {
     (err, result) => {
       if (err) {
         callback(err);
+      } else {
+        const insertId = (<OkPacket>result).insertId;
+        callback(null, insertId);
       }
-      const insertId = (<OkPacket>result).insertId;
-      callback(null, insertId);
     }
   );
 };
-export const findOne = (pacienteId: number, callback: Function) => {
+export const findOne = (pacienteId: string, callback: Function) => {
   const queryString = "SELECT * FROM Pacientes WHERE IdPaciente=?";
 
   db.query(queryString, pacienteId, (err, result) => {

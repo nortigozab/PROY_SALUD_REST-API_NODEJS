@@ -107,7 +107,7 @@ pacienteRouter.post("/", async (req: Request, res: Response) => {
   });
 });
 pacienteRouter.get("/:id", async (req: Request, res: Response) => {
-  const pacienteId = Number(req.params.id);
+  const pacienteId = req.params.id;
   pacienteModel.findOne(pacienteId, (err: Error, paciente: Paciente) => {
     if (err) {
       return res.status(500).json({ message: err.message });
