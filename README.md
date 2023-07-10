@@ -234,7 +234,4 @@ En esta versión se hace una prueba para citas médicas de forma gráfica, donde
 
 ### Video
 
-| Descripcion                 |                       Soporte                       |
-| :-------------------------- | :-------------------------------------------------: |
-| Se hace el soporte de video | ![Soporte Final](./Final.mp4?raw=true "Importante") |
-|  |
+![Soporte Final](./img/Final.mp4?raw=true "Importante")
