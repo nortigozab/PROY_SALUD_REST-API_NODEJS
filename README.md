@@ -74,7 +74,6 @@ La aplicación se desarrolló y probó en el siguiente entorno:
 - Base de datos: <i class="fas fa-database"></i> DBeaver :floppy_disk:
 - Navegador web: <i class="fab fa-chrome"></i> Google Chrome :globe_with_meridians:
 
-
 ## Base de Datos SQL
 
 ![database](./img/database.png?raw=true "import")
@@ -87,11 +86,14 @@ La aplicación se desarrolló y probó en el siguiente entorno:
 | **Doctores**       | Almacena los datos de los doctores que atienden las citas médicas. Cada doctor tiene un identificador único (IdDoctor), nombre, apellido, especialidad, consultorio asignado y correo de contacto. La especialidad se relaciona con la tabla de Especialidades mediante una clave foránea. |
 | **CitasMedicas**   | Registra las citas médicas programadas. Cada cita tiene un identificador único (IdCita), doctor asignado, paciente, especialidad, fecha y disponibilidad. Tanto el doctor, el paciente y la especialidad se relacionan con sus respectivas tablas mediante claves foráneas.                |
 
-
 ## Rutas y Funcionalidades
+
 ### Inicio
+
 - Index: http://127.0.0.1:3000/
+
 ### Doctores
+
 - Lista de todos:http://127.0.0.1:3000/doctores
   - Se En lista todos los doctores y se ve:
     - Id
@@ -101,23 +103,17 @@ La aplicación se desarrolló y probó en el siguiente entorno:
     - Accion: ver -> Para Editar datos
 - Ver Doctor: http://127.0.0.1:3000/doctores/:id
   - Se visualiza un formulario para editar:
-      - nombre
-      - apellido
-      - correo
-      - Accion:
-        - Editar: Para hacer un put
-        - Cancelar: Para cancelar y devolverse.
-  
+    - nombre
+    - apellido
+    - correo
+    - Accion:
+      - Editar: Para hacer un put
+      - Cancelar: Para cancelar y devolverse.
 - Crear Doctor: http://127.0.0.1:3000/doctores/crear
-  - Se visualiza un formulario para Crear Doctor:
-        - nombre
-        - apellido
-        - correo
-        - Especialidad
-        - Consultorio: Donde se Asigna Predeterminadamente uno disponible ("No se a probado pero se recomienda siempre tener consultorios disponibles")
-        - Accion:
-          - Crear: Para hacer un post
+  - Se visualiza un formulario para Crear Doctor: - nombre - apellido - correo - Especialidad - Consultorio: Donde se Asigna Predeterminadamente uno disponible ("No se a probado pero se recomienda siempre tener consultorios disponibles") - Accion: - Crear: Para hacer un post
+
 ### Pacientes
+
 - Lista de todos:http://127.0.0.1:3000/pacientes
   - Se En lista todos los pacientes y se ve:
     - Id
@@ -127,25 +123,26 @@ La aplicación se desarrolló y probó en el siguiente entorno:
     - Accion: ver -> Para Editar datos
 - Ver Paciente: http://127.0.0.1:3000/pacientes/:id
   - Se visualiza un formulario para editar:
-      - nombre
-      - apellido
-      - Cedula
-      - Fecha de nacimiento
-      - teléfono
-      - Accion:
-        - Editar: Para hacer un put
-        - Cancelar: Para cancelar y devolverse.
-  
+    - nombre
+    - apellido
+    - Cedula
+    - Fecha de nacimiento
+    - teléfono
+    - Accion:
+      - Editar: Para hacer un put
+      - Cancelar: Para cancelar y devolverse.
 - Crear Paciente: http://127.0.0.1:3000/pacientes/crear
   - Se visualiza un formulario para Crear Doctor:
-        - nombre
-      - apellido
-      - Cedula
-      - Fecha de nacimiento
-      - teléfono
-      - Accion:
-        - Crear: Para hacer un post
+    - nombre
+    - apellido
+    - Cedula
+    - Fecha de nacimiento
+    - teléfono
+    - Accion:
+      - Crear: Para hacer un post
+
 ### CitasMedicas
+
 - Lista de todos:http://127.0.0.1:3000/citasmedicas
   - Se En lista todos los citasmedicas y se ve ("**Se vizualiza verde si esta disponible, de lo contrario es Rojo**"):
     - Id
@@ -155,29 +152,31 @@ La aplicación se desarrolló y probó en el siguiente entorno:
     - Fecha: se formatea la fecha para verse , Nombre Dia, numero del dia, mes y año
     - Accion: ver -> Para Editar datos
 - Ver CitasMedica: http://127.0.0.1:3000/citasmedicas/:id
+
   - Se visualiza un formulario para editar:
-      - Numero Cedula
-      - Especialidad
-      - Doctor
-      - Fecha
-      - teléfono
-      - Accion:
-        - Editar: Para hacer un put
-        - Cancelar: Para cancelar y devolverse.
+    - Numero Cedula
+    - Especialidad
+    - Doctor
+    - Fecha
+    - teléfono
+    - Accion:
+      - Editar: Para hacer un put
+      - Cancelar: Para cancelar y devolverse.
 
   (**Si se Cambia la especialidad se actualiza la lista de doctores para ver los doctores con esa especialidad**)
-  
+
 - Crear CitasMedica: http://127.0.0.1:3000/citasmedicas/crear
+
   - Se visualiza un formulario para Crear Doctor:
-      - Numero Cedula
-      - Especialidad
-      - Doctor
-      - Fecha
-      - teléfono
-      - Accion:
-        - Crear: Para hacer un post
-  
-   (**Si se Cambia la especialidad se actualiza la lista de doctores para ver los doctores con esa especialidad**)
+    - Numero Cedula
+    - Especialidad
+    - Doctor
+    - Fecha
+    - teléfono
+    - Accion:
+      - Crear: Para hacer un post
+
+  (**Si se Cambia la especialidad se actualiza la lista de doctores para ver los doctores con esa especialidad**)
 
 ## Linea de Tiempo
 
@@ -232,3 +231,10 @@ En esta versión se hace una prueba para citas médicas de forma gráfica, donde
 | Descripcion                                    |                   Soporte                   |
 | :--------------------------------------------- | :-----------------------------------------: |
 | Se hace una cuarta prueba, ya de forma grafica | ![Soporte 4](./img/4.gif?raw=true "import") |
+
+### Video
+
+| Descripcion                 |                       Soporte                       |
+| :-------------------------- | :-------------------------------------------------: |
+| Se hace el soporte de video | ![Soporte Final](./Final.mp4?raw=true "Importante") |
+|  |
