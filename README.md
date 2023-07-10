@@ -231,7 +231,3 @@ En esta versión se hace una prueba para citas médicas de forma gráfica, donde
 | Descripcion                                    |                   Soporte                   |
 | :--------------------------------------------- | :-----------------------------------------: |
 | Se hace una cuarta prueba, ya de forma grafica | ![Soporte 4](./img/4.gif?raw=true "import") |
-
-### Video
-
-![Video](https://www.canva.com/design/DAFmzg0e0K0/view?embed "Video")
