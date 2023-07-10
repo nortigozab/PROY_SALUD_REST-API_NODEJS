@@ -233,7 +233,7 @@ En esta versión se hace una prueba para citas médicas de forma gráfica, donde
 | Se hace una cuarta prueba, ya de forma grafica | ![Soporte 4](./img/4.gif?raw=true "import") |
 
 ### Video
+
+Se Agrega soporte de video de todas las funcionalidades del proyecto.
+
 https://github.com/nortigozab/PROY_SALUD_REST-API/assets/77377179/b4af0ef5-4c97-42b0-8e67-db26cfd52509
-
-
-
